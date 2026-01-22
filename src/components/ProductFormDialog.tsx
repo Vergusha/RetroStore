@@ -22,6 +22,7 @@ import { Textarea } from './ui/textarea'
 import { Alert, AlertDescription } from './ui/alert'
 import { Loader2 } from 'lucide-react'
 import { Checkbox } from './ui/checkbox'
+import { useNavigate } from '@tanstack/react-router'
 
 interface ProductFormDialogProps {
     open: boolean
@@ -40,6 +41,7 @@ const CATEGORIES = [
 ]
 
 export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: ProductFormDialogProps) {
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [imageFile, setImageFile] = useState<File | null>(null)
@@ -109,14 +111,23 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
                 rating: parseFloat(formData.rating)
             }
 
+            let createdProduct
             if (product?.$id) {
                 await productService.updateProduct(product.$id, productData)
             } else {
-                await productService.createProduct(productData)
+                createdProduct = await productService.createProduct(productData)
             }
 
             onSuccess()
             onOpenChange(false)
+
+            // Navigate to product page if new product was created
+            if (createdProduct?.$id) {
+                navigate({
+                    to: '/product/$productId',
+                    params: { productId: createdProduct.$id }
+                })
+            }
         } catch (err: any) {
             setError(err.message || 'An error occurred')
         } finally {

@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { AuthDialog } from './AuthDialog'
 import { useState, useEffect } from 'react'
 import { adminService } from '../lib/admin'
+import { Link } from '@tanstack/react-router'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -56,26 +57,28 @@ export function Header() {
                 <div className="flex h-16 items-center justify-between">
                     {/* Logo */}
                     <div className="flex items-center gap-2">
-                        <Gamepad2 className="w-8 h-8 text-primary" />
-                        <div className="text-2xl font-bold tracking-tight">
-                            <span className="text-primary">RETRO</span>
-                            <span className="text-muted-foreground">STORE</span>
-                        </div>
+                        <Link to="/" className="flex items-center gap-2">
+                            <Gamepad2 className="w-8 h-8 text-primary" />
+                            <div className="text-2xl font-bold tracking-tight">
+                                <span className="text-primary">RETRO</span>
+                                <span className="text-muted-foreground">STORE</span>
+                            </div>
+                        </Link>
                     </div>
 
                     {/* Navigation */}
                     <nav className="hidden md:flex items-center gap-1">
                         <Button variant="ghost" asChild>
-                            <a href="/">Home</a>
+                            <Link to="/">Home</Link>
                         </Button>
                         <Button variant="ghost" asChild>
-                            <a href="/products">Consoles</a>
+                            <Link to="/products" search={{ category: undefined }}>Consoles</Link>
                         </Button>
                         <Button variant="ghost" asChild>
-                            <a href="/categories">Categories</a>
+                            <Link to="/categories">Categories</Link>
                         </Button>
                         <Button variant="ghost" asChild>
-                            <a href="/about">About</a>
+                            <Link to="/about">About</Link>
                         </Button>
                     </nav>
 
@@ -109,10 +112,10 @@ export function Header() {
                                         <>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem asChild>
-                                                <a href="/admin" className="text-primary">
+                                                <Link to="/admin" className="text-primary">
                                                     <Shield className="w-4 h-4 mr-2" />
                                                     Admin Panel
-                                                </a>
+                                                </Link>
                                             </DropdownMenuItem>
                                         </>
                                     )}                                    <DropdownMenuSeparator />

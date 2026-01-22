@@ -3,6 +3,7 @@ import { Card, CardContent } from './ui/card'
 import { Button } from './ui/button'
 import { useState, useEffect } from 'react'
 import { productService } from '../lib/products'
+import { Link } from '@tanstack/react-router'
 
 interface Category {
     id: number
@@ -100,13 +101,15 @@ export function Categories() {
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     {categories.map((category) => (
-                        <Button
+                        <Link
                             key={category.id}
-                            variant="outline"
-                            className="h-auto p-6 flex flex-col items-center gap-3 hover:bg-primary hover:text-primary-foreground transition-colors group"
-                            asChild
+                            to="/products"
+                            search={{ category: category.name }}
                         >
-                            <a href={`/category/${category.id}`}>
+                            <Button
+                                variant="outline"
+                                className="h-auto p-6 flex flex-col items-center gap-3 hover:bg-primary hover:text-primary-foreground transition-colors group w-full"
+                            >
                                 <div className="text-primary group-hover:text-primary-foreground">
                                     {category.icon}
                                 </div>
@@ -118,8 +121,8 @@ export function Categories() {
                                         {category.itemCount} items
                                     </span>
                                 </div>
-                            </a>
-                        </Button>
+                            </Button>
+                        </Link>
                     ))}
                 </div>
             </div>
