@@ -14,7 +14,7 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     />
   )
 }
-
+// CardHeader component
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -28,6 +28,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+// CardTitle component
 function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -37,7 +38,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
     />
   )
 }
-
+// CardDescription component
 function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -60,7 +61,7 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
     />
   )
 }
-
+// CardContent component
 function CardContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -70,7 +71,7 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
     />
   )
 }
-
+// CardFooter component
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div

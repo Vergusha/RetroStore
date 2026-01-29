@@ -1,34 +1,41 @@
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 import { Button } from './ui/button'
-import { Badge } from './ui/badge'
+import { Gamepad2 } from 'lucide-react'
 
 export function Hero() {
     return (
-        <section className="relative overflow-hidden bg-gradient-to-b from-background to-muted/20">
-            <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
-                <div className="max-w-4xl mx-auto text-center space-y-8">
-                    <Badge variant="secondary" className="gap-1">
-                        <Sparkles className="w-3 h-3" />
-                        New Arrivals Weekly
-                    </Badge>
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10">
+            {/* Animated background elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-blob" />
+                <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-blob animation-delay-2000" />
+            </div>
 
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-                        Welcome to{' '}
-                        <span className="text-primary">Retro Store</span>
+            <div className="container mx-auto px-4 py-20 md:py-32 relative z-10">
+                <div className="max-w-5xl mx-auto text-center space-y-8">
+                    {/* Icon with animation */}
+                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary/10 text-primary mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <Gamepad2 className="w-10 h-10" />
+                    </div>
+
+                    {/* Main heading with gradient */}
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight animate-in fade-in slide-in-from-bottom-4 duration-700 animate-delay-200">
+                        <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+                            Retro Store
+                        </span>
                     </h1>
 
-                    <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-                        Discover classic retro consoles and the latest modern gaming systems.
-                        From vintage Nintendo to PlayStation 5 — we have it all!
+                    {/* Subtitle */}
+                    <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-700 animate-delay-400">
+                        Discover legendary retro consoles and modern gaming systems
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                        <Button size="lg" className="gap-2">
-                            Shop Now
-                            <ArrowRight className="w-4 h-4" />
-                        </Button>
-                        <Button size="lg" variant="outline">
-                            Browse Categories
+                    {/* Single clear CTA */}
+                    <div className="pt-4 animate-in fade-in slide-in-from-bottom-4 duration-700 animate-delay-400">
+                        <Button size="lg" asChild className="text-lg px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                            <Link to="/products" search={{}}>
+                                Browse Consoles
+                            </Link>
                         </Button>
                     </div>
                 </div>

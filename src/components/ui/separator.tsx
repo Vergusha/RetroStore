@@ -2,6 +2,7 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+// Separator component
 const Separator = React.forwardRef<
     HTMLDivElement,
     React.ComponentPropsWithoutRef<"div"> & {

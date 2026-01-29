@@ -4,6 +4,7 @@ import { CheckIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+// Checkbox component
 function Checkbox({
   className,
   ...props

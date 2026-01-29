@@ -8,7 +8,7 @@ export interface User {
 }
 
 export const authService = {
-    // Register new user
+    // Регистрация нового пользователя
     async register(email: string, password: string, name: string): Promise<User> {
         try {
             const user = await account.create(ID.unique(), email, password, name)
@@ -21,7 +21,7 @@ export const authService = {
         }
     },
 
-    // Login user
+    // Асинхронный вход пользователя
     async login(email: string, password: string): Promise<any> {
         try {
             return await account.createEmailPasswordSession(email, password)
@@ -41,7 +41,7 @@ export const authService = {
         }
     },
 
-    // Get current user
+    // Получние текущего пользователя
     async getCurrentUser(): Promise<User | null> {
         try {
             const user = await account.get()
@@ -51,7 +51,7 @@ export const authService = {
         }
     },
 
-    // Check if user is logged in
+    // Проверка авторизации пользователя
     async isLoggedIn(): Promise<boolean> {
         try {
             await account.get()

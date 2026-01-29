@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
 import { Gamepad2, Heart, Package, Shield } from 'lucide-react'
+import { Breadcrumbs } from '../components/Breadcrumbs'
 
 export const Route = createFileRoute('/about')({
     component: AboutPage,
@@ -8,8 +9,10 @@ export const Route = createFileRoute('/about')({
 
 function AboutPage() {
     return (
-        <div className="min-h-screen bg-background">
-            <div className="container mx-auto px-4 py-16">
+        <div className="container mx-auto px-4 py-16">
+            <div className="mb-8">
+                <Breadcrumbs items={[{ label: 'About', current: true }]} />
+            </div>
                 {/* Hero Section */}
                 <div className="text-center mb-16">
                     <div className="flex justify-center mb-4">
@@ -140,7 +143,6 @@ function AboutPage() {
                         Browse our catalog and discover the console that defined your childhood—or start a new retro adventure.
                     </p>
                 </div>
-            </div>
         </div>
     )
 }

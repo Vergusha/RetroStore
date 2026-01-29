@@ -88,29 +88,31 @@ export function Categories() {
     }
 
     return (
-        <section className="py-16 bg-muted/30">
+        <section className="py-20 bg-muted/20">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-12 space-y-4">
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-                        Console Categories
+                <div className="text-center mb-16 space-y-4">
+                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-primary/70 bg-clip-text text-transparent">
+                        Categories
                     </h2>
                     <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Explore our collection of gaming consoles by category
+                        Explore our collection of gaming consoles
                     </p>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    {categories.map((category) => (
+                    {categories.map((category, index) => (
                         <Link
                             key={category.id}
                             to="/products"
                             search={{ category: category.name }}
+                            className="animate-in fade-in slide-in-from-bottom-4 duration-500"
+                            style={{ animationDelay: `${index * 50}ms` }}
                         >
                             <Button
                                 variant="outline"
-                                className="h-auto p-6 flex flex-col items-center gap-3 hover:bg-primary hover:text-primary-foreground transition-colors group w-full"
+                                className="h-auto p-6 flex flex-col items-center gap-3 hover:bg-primary hover:text-primary-foreground hover:scale-105 transition-all group w-full rounded-xl shadow-sm hover:shadow-lg"
                             >
-                                <div className="text-primary group-hover:text-primary-foreground">
+                                <div className="text-primary group-hover:text-primary-foreground transition-colors">
                                     {category.icon}
                                 </div>
                                 <div className="text-center space-y-1">
@@ -118,7 +120,7 @@ export function Categories() {
                                         {category.name}
                                     </h3>
                                     <span className="text-xs text-muted-foreground group-hover:text-primary-foreground/80">
-                                        {category.itemCount} items
+                                        {category.itemCount}
                                     </span>
                                 </div>
                             </Button>

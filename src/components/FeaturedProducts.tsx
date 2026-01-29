@@ -1,10 +1,8 @@
-import { Star, ShoppingCart } from 'lucide-react'
-import { Card, CardContent, CardFooter } from './ui/card'
-import { Button } from './ui/button'
-import { Badge } from './ui/badge'
 import { useState, useEffect } from 'react'
 import { productService, type Product } from '../lib/products'
+import { Button } from './ui/button'
 import { Link } from '@tanstack/react-router'
+import { ProductCard } from './ProductCard'
 
 export function FeaturedProducts() {
     const [products, setProducts] = useState<Product[]>([])
@@ -54,90 +52,35 @@ export function FeaturedProducts() {
         )
     }
     return (
-        <section className="py-16">
+        <section className="py-20 bg-gradient-to-b from-background to-muted/20">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-12 space-y-4">
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+                <div className="text-center mb-16 space-y-4">
+                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-primary/70 bg-clip-text text-transparent">
                         Featured Consoles
                     </h2>
                     <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Hand-picked collection of the best retro and modern gaming consoles
+                        Hand-picked collection of retro and modern gaming systems
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {products.map((product) => (
-                        <Link
+                    {products.map((product, index) => (
+                        <div
                             key={product.$id}
-                            to="/product/$productId"
-                            params={{ productId: product.$id! }}
-                            className="block"
+                            className="animate-in fade-in slide-in-from-bottom-8 duration-500"
+                            style={{ animationDelay: `${index * 100}ms` }}
                         >
-                            <Card className="group overflow-hidden hover:shadow-lg transition-shadow h-full cursor-pointer">
-                                {/* Product Image */}
-                                <div className="relative overflow-hidden aspect-square">
-                                    <img
-                                        src={product.image}
-                                        alt={product.name}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                    {product.oldPrice && (
-                                        <Badge variant="destructive" className="absolute top-3 left-3">
-                                            -{Math.round((1 - product.price / product.oldPrice) * 100)}% OFF
-                                        </Badge>
-                                    )}
-                                    <Button
-                                        size="icon"
-                                        className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity"
-                                        onClick={(e) => e.preventDefault()}
-                                    >
-                                        <ShoppingCart className="w-4 h-4" />
-                                    </Button>
-                                </div>
-
-                                {/* Product Info */}
-                                <CardContent className="space-y-3">
-                                    <Badge variant="secondary" className="w-fit">
-                                        {product.category}
-                                    </Badge>
-                                    <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors">
-                                        {product.name}
-                                    </h3>
-
-                                    <div className="flex items-center gap-1">
-                                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                                        <span className="text-sm font-medium">
-                                            {product.rating}
-                                        </span>
-                                    </div>
-                                </CardContent>
-
-                                <CardFooter className="flex items-center justify-between">
-                                    <div className="space-y-1">
-                                        <div className="text-2xl font-bold">
-                                            ${product.price.toLocaleString('en-US')}
-                                        </div>
-                                        {product.oldPrice && (
-                                            <div className="text-sm text-muted-foreground line-through">
-                                                ${product.oldPrice.toLocaleString('en-US')}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <Button size="sm" onClick={(e) => e.preventDefault()}>
-                                        Add to Cart
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        </Link>
+                            <ProductCard product={product} />
+                        </div>
                     ))}
                 </div>
 
-                <div className="text-center mt-12">
-                    <Button size="lg" asChild>
-                        <Link to="/products" search={{}}>View All Consoles</Link>
+                <div className="text-center mt-16">
+                    <Button size="lg" variant="outline" asChild className="rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <Link to="/products" search={{}}>View All</Link>
                     </Button>
                 </div>
-            </div >
-        </section >
+            </div>
+        </section>
     )
 }

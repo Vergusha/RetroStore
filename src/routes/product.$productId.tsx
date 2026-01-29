@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Loader2, ShoppingCart, Heart, Share2, Star, Check, ArrowLeft } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 export const Route = createFileRoute('/product/$productId')({
     component: ProductPage,
@@ -62,18 +63,12 @@ function ProductPage() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            {/* Breadcrumbs */}
-            <div className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
-                <Link to="/" className="hover:text-foreground transition-colors">
-                    Home
-                </Link>
-                <span>/</span>
-                <Link to="/products" className="hover:text-foreground transition-colors">
-                    Products
-                </Link>
-                <span>/</span>
-                <span className="text-foreground">{product.name}</span>
-            </div>
+            <Breadcrumbs
+                items={[
+                    { label: 'Products', href: '/products' },
+                    { label: product.name, current: true }
+                ]}
+            />
 
             <div className="grid md:grid-cols-2 gap-8 mb-12">
                 {/* Product Image */}

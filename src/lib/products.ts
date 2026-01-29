@@ -40,7 +40,7 @@ export const productService = {
         }
     },
 
-    // Get featured products
+    // Получние популярных товаров
     async getFeaturedProducts(): Promise<Product[]> {
         try {
             const response = await databases.listDocuments(
@@ -55,7 +55,7 @@ export const productService = {
         }
     },
 
-    // Get product by ID
+    // Получние одного товара по ID
     async getProduct(id: string): Promise<Product> {
         try {
             const response = await databases.getDocument(
@@ -70,7 +70,7 @@ export const productService = {
         }
     },
 
-    // Create product
+    // Создание продукта
     async createProduct(product: Omit<Product, '$id' | '$createdAt' | '$updatedAt'>): Promise<Product> {
         try {
             const response = await databases.createDocument(
@@ -86,7 +86,7 @@ export const productService = {
         }
     },
 
-    // Update product
+    // Обновление продукта
     async updateProduct(id: string, product: Partial<Product>): Promise<Product> {
         try {
             const response = await databases.updateDocument(
@@ -102,7 +102,7 @@ export const productService = {
         }
     },
 
-    // Delete product
+    // Удаление продукта по ID
     async deleteProduct(id: string): Promise<void> {
         try {
             await databases.deleteDocument(
@@ -116,7 +116,7 @@ export const productService = {
         }
     },
 
-    // Upload product image
+    // Загрузка изображения продукта
     async uploadImage(file: File): Promise<string> {
         try {
             const response = await storage.createFile(
