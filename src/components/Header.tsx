@@ -46,11 +46,6 @@ export function Header() {
         setAuthDialogOpen(true)
     }
 
-    const openRegisterDialog = () => {
-        setAuthMode('register')
-        setAuthDialogOpen(true)
-    }
-
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80 shadow-sm">
             <div className="container mx-auto px-4">

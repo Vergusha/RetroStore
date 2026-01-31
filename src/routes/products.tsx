@@ -52,12 +52,12 @@ function Products() {
         );
     }
 
-    const breadcrumbItems = [
+    const breadcrumbItems: { label: string; href?: string }[] = [
         { label: 'Products', href: '/products' }
     ];
 
     if (category) {
-        breadcrumbItems.push({ label: category, current: true });
+        breadcrumbItems.push({ label: category });
     }
 
     return (

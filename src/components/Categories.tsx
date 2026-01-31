@@ -1,5 +1,4 @@
 import { Gamepad2, Cpu, Zap, Package, Joystick, Smartphone } from 'lucide-react'
-import { Card, CardContent } from './ui/card'
 import { Button } from './ui/button'
 import { useState, useEffect } from 'react'
 import { productService } from '../lib/products'

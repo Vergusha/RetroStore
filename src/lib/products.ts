@@ -1,4 +1,4 @@
-import { Client, Databases, Storage, ID, Query } from 'appwrite'
+import { Databases, Storage, ID, Query } from 'appwrite'
 import { client } from './appwrite'
 
 export const databases = new Databases(client)
