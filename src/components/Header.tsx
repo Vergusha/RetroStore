@@ -1,8 +1,8 @@
-import { ShoppingCart, Search, User, Menu, Gamepad2, LogOut, Shield } from 'lucide-react'
+import { Search, User, Menu, Gamepad2, LogOut, Shield, Receipt, UserCircle } from 'lucide-react'
 import { Button } from './ui/button'
-import { Badge } from './ui/badge'
 import { useAuth } from '../contexts/AuthContext'
 import { AuthDialog } from './AuthDialog'
+import { CartSheet } from './CartSheet'
 import { useState, useEffect } from 'react'
 import { adminService } from '../lib/admin'
 import { Link } from '@tanstack/react-router'
@@ -101,10 +101,16 @@ export function Header() {
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem asChild>
-                                        <a href="/profile">Profile</a>
+                                        <Link to="/profile">
+                                            <UserCircle className="w-4 h-4 mr-2" />
+                                            Profile
+                                        </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
-                                        <a href="/orders">Orders</a>
+                                        <Link to="/orders">
+                                            <Receipt className="w-4 h-4 mr-2" />
+                                            Orders
+                                        </Link>
                                     </DropdownMenuItem>                                    {isAdmin && (
                                         <>
                                             <DropdownMenuSeparator />
@@ -128,15 +134,7 @@ export function Header() {
                             </Button>
                         )}
 
-                        <Button variant="ghost" size="icon" className="relative">
-                            <ShoppingCart className="w-5 h-5" />
-                            <Badge
-                                variant="destructive"
-                                className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]"
-                            >
-                                0
-                            </Badge>
-                        </Button>
+                        <CartSheet />
                         <Button variant="ghost" size="icon" className="md:hidden">
                             <Menu className="w-5 h-5" />
                         </Button>

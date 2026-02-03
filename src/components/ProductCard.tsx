@@ -4,12 +4,31 @@ import { Button } from './ui/button'
 import { Badge } from './ui/badge'
 import { Link } from '@tanstack/react-router'
 import type { Product } from '../lib/products'
+import { useCart } from '../contexts/CartContext'
+import { useState } from 'react'
 
 interface ProductCardProps {
     product: Product
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+    const { addToCart, isInCart } = useCart()
+    const [isAdding, setIsAdding] = useState(false)
+    const inCart = isInCart(product.$id!)
+
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        if (product.stock === 0 || inCart) return
+
+        setIsAdding(true)
+        addToCart(product)
+
+        // Reset animation after short delay
+        setTimeout(() => setIsAdding(false), 1000)
+    }
+
     return (
         <Link
             to="/product/$productId"
@@ -75,12 +94,22 @@ export function ProductCard({ product }: ProductCardProps) {
                 </CardContent>
                 <CardFooter className="px-4 pb-4">
                     <Button
-                        className="w-full shadow-sm hover:shadow-md transition-shadow"
+                        className={`w-full shadow-sm hover:shadow-md transition-all ${inCart ? 'bg-green-600 hover:bg-green-700' : ''
+                            } ${isAdding ? 'scale-95' : ''}`}
                         disabled={product.stock === 0}
-                        onClick={(e) => e.preventDefault()}
+                        onClick={handleAddToCart}
                     >
-                        <ShoppingCart className="w-4 h-4 mr-2" />
-                        {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                        {inCart ? (
+                            <>
+                                <Check className="w-4 h-4 mr-2" />
+                                Added to Cart
+                            </>
+                        ) : (
+                            <>
+                                <ShoppingCart className="w-4 h-4 mr-2" />
+                                {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                            </>
+                        )}
                     </Button>
                 </CardFooter>
             </Card>

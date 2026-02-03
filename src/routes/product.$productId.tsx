@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Loader2, ShoppingCart, Heart, Share2, Star, Check, ArrowLeft } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { useCart } from '@/contexts/CartContext';
 
 export const Route = createFileRoute('/product/$productId')({
     component: ProductPage,
@@ -17,6 +18,8 @@ function ProductPage() {
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
+    const { addToCart, isInCart } = useCart();
+    const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
         loadProduct();
@@ -93,8 +96,8 @@ function ProductPage() {
                                     <Star
                                         key={i}
                                         className={`h-5 w-5 ${i < (product.rating || 0)
-                                                ? 'text-yellow-400 fill-yellow-400'
-                                                : 'text-gray-300'
+                                            ? 'text-yellow-400 fill-yellow-400'
+                                            : 'text-gray-300'
                                             }`}
                                     />
                                 ))}
@@ -171,9 +174,27 @@ function ProductPage() {
 
                             {/* Action Buttons */}
                             <div className="flex gap-4">
-                                <Button className="flex-1" size="lg">
-                                    <ShoppingCart className="h-5 w-5 mr-2" />
-                                    Add to Cart - ${totalPrice.toFixed(2)}
+                                <Button
+                                    className={`flex-1 ${isInCart(product.$id!) ? 'bg-green-600 hover:bg-green-700' : ''} ${isAdding ? 'scale-95' : ''} transition-all`}
+                                    size="lg"
+                                    onClick={() => {
+                                        if (isInCart(product.$id!)) return;
+                                        setIsAdding(true);
+                                        addToCart(product, quantity);
+                                        setTimeout(() => setIsAdding(false), 1000);
+                                    }}
+                                >
+                                    {isInCart(product.$id!) ? (
+                                        <>
+                                            <Check className="h-5 w-5 mr-2" />
+                                            Added to Cart
+                                        </>
+                                    ) : (
+                                        <>
+                                            <ShoppingCart className="h-5 w-5 mr-2" />
+                                            Add to Cart - ${totalPrice.toFixed(2)}
+                                        </>
+                                    )}
                                 </Button>
                                 <Button variant="outline" size="lg">
                                     <Heart className="h-5 w-5" />
