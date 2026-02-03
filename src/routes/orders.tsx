@@ -103,26 +103,17 @@ function OrdersPage() {
         }
     }
 
-    const [downloadingReceipt, setDownloadingReceipt] = useState<string | null>(null)
-
-    const downloadReceipt = async (order: Order) => {
-        setDownloadingReceipt(order.$id!)
-        try {
-            const blob = await orderService.generateReceiptPDF(order)
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `receipt-${order.$id}.pdf`
-            document.body.appendChild(a)
-            a.click()
-            document.body.removeChild(a)
-            URL.revokeObjectURL(url)
-        } catch (error) {
-            console.error('Failed to generate PDF receipt:', error)
-            alert('Failed to generate PDF receipt. Please try again.')
-        } finally {
-            setDownloadingReceipt(null)
-        }
+    const downloadReceipt = (order: Order) => {
+        const html = orderService.generateReceiptHTML(order)
+        const blob = new Blob([html], { type: 'text/html' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `receipt-${order.$id}.html`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
     }
 
     if (!user) {
@@ -361,19 +352,9 @@ function OrdersPage() {
                                         variant="outline"
                                         size="sm"
                                         onClick={() => downloadReceipt(order)}
-                                        disabled={downloadingReceipt === order.$id}
                                     >
-                                        {downloadingReceipt === order.$id ? (
-                                            <>
-                                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                                Generating PDF...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Download className="w-4 h-4 mr-2" />
-                                                Download PDF
-                                            </>
-                                        )}
+                                        <Download className="w-4 h-4 mr-2" />
+                                        Download Receipt
                                     </Button>
                                 </div>
                             </CardContent>
