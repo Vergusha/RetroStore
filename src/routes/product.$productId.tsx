@@ -4,7 +4,7 @@ import { productService, type Product } from '@/lib/products';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Loader2, ShoppingCart, Heart, Share2, Star, Check, ArrowLeft, Copy, CheckCheck } from 'lucide-react';
+import { Loader2, ShoppingCart, Heart, Share2, Star, Check, ArrowLeft, CheckCheck } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { useCart } from '@/contexts/CartContext';
