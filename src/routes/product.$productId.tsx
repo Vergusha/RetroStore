@@ -26,7 +26,7 @@ function ProductPage() {
 
     const handleShare = async () => {
         const url = window.location.href;
-        
+
         if (navigator.share) {
             try {
                 await navigator.share({
