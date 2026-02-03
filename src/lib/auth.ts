@@ -1,5 +1,5 @@
 import { account } from './appwrite'
-import { ID } from 'appwrite'
+import { ID, OAuthProvider } from 'appwrite'
 
 export interface User {
     $id: string
@@ -58,6 +58,21 @@ export const authService = {
             return true
         } catch {
             return false
+        }
+    },
+
+    // OAuth login with GitHub
+    async loginWithGithub(): Promise<void> {
+        try {
+            // Redirect to GitHub OAuth
+            account.createOAuth2Session(
+                OAuthProvider.Github,
+                `${window.location.origin}/`,
+                `${window.location.origin}/`
+            )
+        } catch (error) {
+            console.error('GitHub OAuth error:', error)
+            throw error
         }
     }
 }

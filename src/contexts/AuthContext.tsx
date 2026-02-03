@@ -7,6 +7,7 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<void>
     register: (email: string, password: string, name: string) => Promise<void>
     logout: () => Promise<void>
+    loginWithGithub: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -45,8 +46,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(null)
     }
 
+    async function loginWithGithub() {
+        await authService.loginWithGithub()
+        // After OAuth redirect, user will be set by checkUser
+    }
+
     return (
-        <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, register, logout, loginWithGithub }}>
             {children}
         </AuthContext.Provider>
     )
