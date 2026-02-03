@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { AuthProvider } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
+import { FavoritesProvider } from './contexts/FavoritesContext'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -35,7 +36,9 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <AuthProvider>
         <CartProvider>
-          <RouterProvider router={router} />
+          <FavoritesProvider>
+            <RouterProvider router={router} />
+          </FavoritesProvider>
         </CartProvider>
       </AuthProvider>
     </StrictMode>,

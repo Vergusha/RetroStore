@@ -4,10 +4,11 @@ import { productService, type Product } from '@/lib/products';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Loader2, ShoppingCart, Heart, Share2, Star, Check, ArrowLeft } from 'lucide-react';
+import { Loader2, ShoppingCart, Heart, Share2, Star, Check, ArrowLeft, Copy, CheckCheck } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { useCart } from '@/contexts/CartContext';
+import { useFavorites } from '@/contexts/FavoritesContext';
 
 export const Route = createFileRoute('/product/$productId')({
     component: ProductPage,
@@ -19,7 +20,35 @@ function ProductPage() {
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const { addToCart, isInCart } = useCart();
+    const { toggleFavorite, isFavorite } = useFavorites();
     const [isAdding, setIsAdding] = useState(false);
+    const [linkCopied, setLinkCopied] = useState(false);
+
+    const handleShare = async () => {
+        const url = window.location.href;
+        
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: product?.name || 'Check out this product',
+                    text: product?.description || '',
+                    url: url
+                });
+            } catch (err) {
+                // User cancelled or share failed, fallback to copy
+                copyToClipboard(url);
+            }
+        } else {
+            copyToClipboard(url);
+        }
+    };
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text).then(() => {
+            setLinkCopied(true);
+            setTimeout(() => setLinkCopied(false), 2000);
+        });
+    };
 
     useEffect(() => {
         loadProduct();
@@ -196,11 +225,11 @@ function ProductPage() {
                                         </>
                                     )}
                                 </Button>
-                                <Button variant="outline" size="lg">
-                                    <Heart className="h-5 w-5" />
+                                <Button variant="outline" size="lg" onClick={() => toggleFavorite(product)} className={isFavorite(product.$id!) ? 'text-red-500 border-red-500 hover:bg-red-50' : ''}>
+                                    <Heart className={`h-5 w-5 ${isFavorite(product.$id!) ? 'fill-red-500' : ''}`} />
                                 </Button>
-                                <Button variant="outline" size="lg">
-                                    <Share2 className="h-5 w-5" />
+                                <Button variant="outline" size="lg" onClick={handleShare} className={linkCopied ? 'text-green-500 border-green-500' : ''}>
+                                    {linkCopied ? <CheckCheck className="h-5 w-5" /> : <Share2 className="h-5 w-5" />}
                                 </Button>
                             </div>
                         </div>
