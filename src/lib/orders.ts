@@ -321,35 +321,47 @@ export const orderService = {
     // Generate PDF receipt using Appwrite Function
     async generateReceiptPDF(order: Order): Promise<Blob> {
         try {
+            const body = JSON.stringify({
+                orderId: order.$id,
+                orderDate: order.$createdAt,
+                status: order.status,
+                userName: order.userName,
+                userEmail: order.userEmail,
+                shippingAddress: order.shippingAddress,
+                shippingCity: order.shippingCity,
+                shippingZip: order.shippingZip,
+                shippingCountry: order.shippingCountry,
+                paymentMethod: order.paymentMethod,
+                totalAmount: order.totalAmount,
+                items: order.items?.map(item => ({
+                    productName: item.productName,
+                    productImage: item.productImage,
+                    quantity: item.quantity,
+                    price: item.price
+                }))
+            })
+
             const execution = await functions.createExecution(
                 GENERATE_PDF_FUNCTION_ID,
-                JSON.stringify({
-                    orderId: order.$id,
-                    orderDate: order.$createdAt,
-                    status: order.status,
-                    userName: order.userName,
-                    userEmail: order.userEmail,
-                    shippingAddress: order.shippingAddress,
-                    shippingCity: order.shippingCity,
-                    shippingZip: order.shippingZip,
-                    shippingCountry: order.shippingCountry,
-                    paymentMethod: order.paymentMethod,
-                    totalAmount: order.totalAmount,
-                    items: order.items?.map(item => ({
-                        productName: item.productName,
-                        productImage: item.productImage,
-                        quantity: item.quantity,
-                        price: item.price
-                    }))
-                }),
-                false,
-                undefined,
-                undefined,
-                undefined
+                body,
+                false, // async = false (synchronous execution)
+                '/', // path
+                'POST', // method
+                { 'Content-Type': 'application/json' } // headers
             )
 
+            console.log('Execution result:', JSON.stringify(execution, null, 2))
+            console.log('Execution status:', execution.status)
+            console.log('Execution responseBody:', execution.responseBody)
+            console.log('Execution errors:', execution.errors)
+            console.log('Execution responseStatusCode:', execution.responseStatusCode)
+
             if (execution.status === 'failed') {
-                throw new Error('PDF generation failed: ' + execution.errors)
+                throw new Error('PDF generation failed: ' + (execution.errors || execution.responseBody))
+            }
+
+            if (execution.status !== 'completed') {
+                throw new Error('PDF generation not completed: ' + execution.status)
             }
 
             // Decode base64 response to PDF blob
