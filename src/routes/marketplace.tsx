@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import { Button } from '../components/ui/button'
 import { Card, CardContent } from '../components/ui/card'
@@ -16,7 +16,6 @@ import {
     Search,
     Loader2,
     Store,
-    Star,
     Eye,
     Filter,
     Grid,
@@ -74,7 +73,6 @@ const CONDITIONS: Record<string, { label: string; color: string }> = {
 }
 
 function MarketplacePage() {
-    const navigate = useNavigate()
     const { user } = useAuth()
     const [products, setProducts] = useState<UsedProduct[]>([])
     const [loading, setLoading] = useState(true)

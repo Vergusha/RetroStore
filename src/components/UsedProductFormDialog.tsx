@@ -19,7 +19,7 @@ import {
     SelectValue,
 } from './ui/select'
 import { Alert, AlertDescription } from './ui/alert'
-import { Loader2, Upload, X, AlertCircle, ImagePlus } from 'lucide-react'
+import { Loader2, X, AlertCircle, ImagePlus } from 'lucide-react'
 import { usedProductService, type UsedProduct } from '../lib/marketplace'
 
 interface UsedProductFormDialogProps {

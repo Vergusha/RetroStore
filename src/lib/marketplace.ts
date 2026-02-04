@@ -1,4 +1,4 @@
-import { Databases, ID, Query, Storage } from 'appwrite'
+import { Databases, ID, Query } from 'appwrite'
 import { client, account } from './appwrite'
 import { DATABASE_ID, STORAGE_BUCKET_ID, storage } from './products'
 

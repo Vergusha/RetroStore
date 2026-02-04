@@ -78,7 +78,7 @@ function ProfilePage() {
     const [mySellerOrders, setMySellerOrders] = useState<MarketplaceOrder[]>([])
     const [myPurchases, setMyPurchases] = useState<MarketplaceOrder[]>([])
     const [transactions, setTransactions] = useState<SellerTransaction[]>([])
-    const [loadingSeller, setLoadingSeller] = useState(true)
+    const [, setLoadingSeller] = useState(true)
 
     // Dialogs
     const [sellerRequestDialogOpen, setSellerRequestDialogOpen] = useState(false)
@@ -782,8 +782,8 @@ function ProfilePage() {
                                     >
                                         <Star
                                             className={`w-8 h-8 ${star <= reviewRating
-                                                    ? 'text-yellow-500 fill-yellow-500'
-                                                    : 'text-muted-foreground'
+                                                ? 'text-yellow-500 fill-yellow-500'
+                                                : 'text-muted-foreground'
                                                 }`}
                                         />
                                     </button>

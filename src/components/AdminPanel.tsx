@@ -11,7 +11,7 @@ import {
 } from '../lib/marketplace'
 import { Button } from '../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 import {
     Plus,
     Pencil,

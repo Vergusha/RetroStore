@@ -1,9 +1,8 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import { Button } from '../components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
+import { Card, CardContent } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
-import { Separator } from '../components/ui/separator'
 import {
     Loader2,
     ArrowLeft,
@@ -11,9 +10,7 @@ import {
     Package,
     MapPin,
     Calendar,
-    DollarSign,
     MessageCircle,
-    Eye,
     User
 } from 'lucide-react'
 import { Breadcrumbs } from '../components/Breadcrumbs'
@@ -245,8 +242,8 @@ function SellerProfilePage() {
                                                 <Star
                                                     key={i}
                                                     className={`h-4 w-4 ${i < Math.round(profile.rating)
-                                                            ? 'text-yellow-500 fill-yellow-500'
-                                                            : 'text-muted-foreground'
+                                                        ? 'text-yellow-500 fill-yellow-500'
+                                                        : 'text-muted-foreground'
                                                         }`}
                                                 />
                                             ))}
@@ -290,8 +287,8 @@ function SellerProfilePage() {
                                                         <Star
                                                             key={i}
                                                             className={`h-3 w-3 ${i < review.rating
-                                                                    ? 'text-yellow-500 fill-yellow-500'
-                                                                    : 'text-muted-foreground'
+                                                                ? 'text-yellow-500 fill-yellow-500'
+                                                                : 'text-muted-foreground'
                                                                 }`}
                                                         />
                                                     ))}
