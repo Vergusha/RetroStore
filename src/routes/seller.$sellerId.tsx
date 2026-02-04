@@ -183,7 +183,7 @@ function SellerProfilePage() {
                             {products.map(product => (
                                 <Link
                                     key={product.$id}
-                                    to="/marketplace/$productId"
+                                    to="/used-product/$productId"
                                     params={{ productId: product.$id! }}
                                 >
                                     <Card className="group hover:shadow-lg transition-all cursor-pointer overflow-hidden">

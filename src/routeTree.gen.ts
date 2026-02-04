@@ -22,7 +22,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsedProductProductIdRouteImport } from './routes/used-product.$productId'
 import { Route as SellerSellerIdRouteImport } from './routes/seller.$sellerId'
 import { Route as ProductProductIdRouteImport } from './routes/product.$productId'
-import { Route as MarketplaceProductIdRouteImport } from './routes/marketplace.$productId'
 
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
@@ -89,11 +88,6 @@ const ProductProductIdRoute = ProductProductIdRouteImport.update({
   path: '/product/$productId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MarketplaceProductIdRoute = MarketplaceProductIdRouteImport.update({
-  id: '/$productId',
-  path: '/$productId',
-  getParentRoute: () => MarketplaceRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -102,11 +96,10 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
-  '/marketplace': typeof MarketplaceRouteWithChildren
+  '/marketplace': typeof MarketplaceRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
-  '/marketplace/$productId': typeof MarketplaceProductIdRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/seller/$sellerId': typeof SellerSellerIdRoute
   '/used-product/$productId': typeof UsedProductProductIdRoute
@@ -118,11 +111,10 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
-  '/marketplace': typeof MarketplaceRouteWithChildren
+  '/marketplace': typeof MarketplaceRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
-  '/marketplace/$productId': typeof MarketplaceProductIdRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/seller/$sellerId': typeof SellerSellerIdRoute
   '/used-product/$productId': typeof UsedProductProductIdRoute
@@ -135,11 +127,10 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
-  '/marketplace': typeof MarketplaceRouteWithChildren
+  '/marketplace': typeof MarketplaceRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
-  '/marketplace/$productId': typeof MarketplaceProductIdRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/seller/$sellerId': typeof SellerSellerIdRoute
   '/used-product/$productId': typeof UsedProductProductIdRoute
@@ -157,7 +148,6 @@ export interface FileRouteTypes {
     | '/orders'
     | '/products'
     | '/profile'
-    | '/marketplace/$productId'
     | '/product/$productId'
     | '/seller/$sellerId'
     | '/used-product/$productId'
@@ -173,7 +163,6 @@ export interface FileRouteTypes {
     | '/orders'
     | '/products'
     | '/profile'
-    | '/marketplace/$productId'
     | '/product/$productId'
     | '/seller/$sellerId'
     | '/used-product/$productId'
@@ -189,7 +178,6 @@ export interface FileRouteTypes {
     | '/orders'
     | '/products'
     | '/profile'
-    | '/marketplace/$productId'
     | '/product/$productId'
     | '/seller/$sellerId'
     | '/used-product/$productId'
@@ -202,7 +190,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CategoriesRoute: typeof CategoriesRoute
   CheckoutRoute: typeof CheckoutRoute
-  MarketplaceRoute: typeof MarketplaceRouteWithChildren
+  MarketplaceRoute: typeof MarketplaceRoute
   OrdersRoute: typeof OrdersRoute
   ProductsRoute: typeof ProductsRoute
   ProfileRoute: typeof ProfileRoute
@@ -304,27 +292,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/marketplace/$productId': {
-      id: '/marketplace/$productId'
-      path: '/$productId'
-      fullPath: '/marketplace/$productId'
-      preLoaderRoute: typeof MarketplaceProductIdRouteImport
-      parentRoute: typeof MarketplaceRoute
-    }
   }
 }
-
-interface MarketplaceRouteChildren {
-  MarketplaceProductIdRoute: typeof MarketplaceProductIdRoute
-}
-
-const MarketplaceRouteChildren: MarketplaceRouteChildren = {
-  MarketplaceProductIdRoute: MarketplaceProductIdRoute,
-}
-
-const MarketplaceRouteWithChildren = MarketplaceRoute._addFileChildren(
-  MarketplaceRouteChildren,
-)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -333,7 +302,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CategoriesRoute: CategoriesRoute,
   CheckoutRoute: CheckoutRoute,
-  MarketplaceRoute: MarketplaceRouteWithChildren,
+  MarketplaceRoute: MarketplaceRoute,
   OrdersRoute: OrdersRoute,
   ProductsRoute: ProductsRoute,
   ProfileRoute: ProfileRoute,
