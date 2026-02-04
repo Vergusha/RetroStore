@@ -1,4 +1,4 @@
-import { Search, User, Menu, Gamepad2, LogOut, Shield, Receipt, UserCircle } from 'lucide-react'
+import { Search, User, Menu, Gamepad2, LogOut, Shield, Receipt, UserCircle, Store } from 'lucide-react'
 import { Button } from './ui/button'
 import { useAuth } from '../contexts/AuthContext'
 import { AuthDialog } from './AuthDialog'
@@ -73,6 +73,12 @@ export function Header() {
                         </Button>
                         <Button variant="ghost" asChild className="font-medium">
                             <Link to="/categories">Categories</Link>
+                        </Button>
+                        <Button variant="ghost" asChild className="font-medium">
+                            <Link to="/marketplace" className="flex items-center gap-1">
+                                <Store className="w-4 h-4" />
+                                Marketplace
+                            </Link>
                         </Button>
                         <Button variant="ghost" asChild className="font-medium">
                             <Link to="/about">About</Link>
