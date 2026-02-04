@@ -114,6 +114,20 @@ function MarketplacePage() {
             if (!isSellerStatus) {
                 const request = await sellerRequestService.getUserRequest()
                 setSellerRequest(request)
+
+                // If request was approved but profile check failed, force refresh
+                if (request && request.status === 'approved') {
+                    // Small delay then recheck - profile might have just been created
+                    setTimeout(async () => {
+                        const recheck = await sellerProfileService.isSeller()
+                        if (recheck) {
+                            setIsSeller(true)
+                            setSellerRequest(null)
+                        }
+                    }, 500)
+                }
+            } else {
+                setSellerRequest(null)
             }
         } catch (error) {
             console.error('Error checking seller status:', error)

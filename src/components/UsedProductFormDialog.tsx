@@ -160,7 +160,7 @@ export function UsedProductFormDialog({
                     name: data.name,
                     description: data.description,
                     condition: data.condition,
-                    price: data.price,
+                    price: parseFloat(String(data.price)),
                     category: data.category,
                     imageFiles
                 })
