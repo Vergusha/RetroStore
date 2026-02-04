@@ -304,7 +304,7 @@ function MarketplaceProductCard({ product, viewMode }: MarketplaceProductCardPro
 
     if (viewMode === 'list') {
         return (
-            <Link to="/marketplace/$productId" params={{ productId: product.$id! }}>
+            <Link to="/used-product/$productId" params={{ productId: product.$id! }}>
                 <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                     <CardContent className="p-4">
                         <div className="flex gap-4">
@@ -345,7 +345,7 @@ function MarketplaceProductCard({ product, viewMode }: MarketplaceProductCardPro
     }
 
     return (
-        <Link to="/marketplace/$productId" params={{ productId: product.$id! }}>
+        <Link to="/used-product/$productId" params={{ productId: product.$id! }}>
             <Card className="group hover:shadow-lg transition-all cursor-pointer overflow-hidden h-full">
                 <div className="aspect-square relative overflow-hidden">
                     <img

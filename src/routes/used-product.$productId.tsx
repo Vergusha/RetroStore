@@ -44,7 +44,7 @@ import {
 } from '../lib/marketplace'
 import { Alert, AlertDescription } from '../components/ui/alert'
 
-export const Route = createFileRoute('/marketplace/$productId')({
+export const Route = createFileRoute('/used-product/$productId')({
     component: MarketplaceProductPage,
 })
 
