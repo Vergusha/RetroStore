@@ -889,6 +889,78 @@ export const marketplaceOrderService = {
             console.error('Error getting all orders:', error)
             throw error
         }
+    },
+
+    // Admin confirm delivery and release funds to seller
+    async adminConfirmDelivery(orderId: string): Promise<void> {
+        try {
+            const order = await databases.getDocument(
+                DATABASE_ID,
+                MARKETPLACE_ORDERS_COLLECTION_ID,
+                orderId
+            ) as unknown as MarketplaceOrder
+
+            // Update order status
+            await databases.updateDocument(
+                DATABASE_ID,
+                MARKETPLACE_ORDERS_COLLECTION_ID,
+                orderId,
+                {
+                    status: 'confirmed' as MarketplaceOrderStatus,
+                    deliveryConfirmedAt: new Date().toISOString()
+                }
+            )
+
+            // Move pending balance to available balance
+            const sellerProfile = await sellerProfileService.getProfileByUserId(order.sellerId)
+            if (sellerProfile && sellerProfile.$id) {
+                const newPendingBalance = Math.max(0, sellerProfile.pendingBalance - order.productPrice)
+                const newBalance = sellerProfile.balance + order.productPrice
+                const newTotalEarnings = sellerProfile.totalEarnings + order.productPrice
+                const newTotalSales = sellerProfile.totalSales + 1
+
+                await sellerProfileService.updateProfile(sellerProfile.$id, {
+                    pendingBalance: newPendingBalance,
+                    balance: newBalance,
+                    totalEarnings: newTotalEarnings,
+                    totalSales: newTotalSales
+                })
+
+                // Create transaction record
+                await databases.createDocument(
+                    DATABASE_ID,
+                    SELLER_TRANSACTIONS_COLLECTION_ID,
+                    ID.unique(),
+                    {
+                        sellerId: order.sellerId,
+                        orderId: orderId,
+                        type: 'sale' as TransactionType,
+                        amount: order.productPrice,
+                        description: `Sale confirmed by admin: ${order.productName}`,
+                        balanceBefore: sellerProfile.balance,
+                        balanceAfter: newBalance
+                    }
+                )
+            }
+        } catch (error) {
+            console.error('Error admin confirming delivery:', error)
+            throw error
+        }
+    },
+
+    // Admin update order status
+    async adminUpdateOrderStatus(orderId: string, status: MarketplaceOrderStatus): Promise<void> {
+        try {
+            await databases.updateDocument(
+                DATABASE_ID,
+                MARKETPLACE_ORDERS_COLLECTION_ID,
+                orderId,
+                { status }
+            )
+        } catch (error) {
+            console.error('Error updating order status:', error)
+            throw error
+        }
     }
 }
 

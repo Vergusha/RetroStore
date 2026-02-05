@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react'
 import { AdminRoute } from '../components/AdminRoute'
 import { productService, type Product } from '../lib/products'
+import { orderService, type Order } from '../lib/orders'
 import {
     sellerRequestService,
     usedProductService,
     sellerProfileService,
+    marketplaceOrderService,
     type SellerRequest,
     type UsedProduct,
     type SellerProfile,
+    type MarketplaceOrder,
 } from '../lib/marketplace'
 import { Button } from '../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card'
@@ -25,7 +28,11 @@ import {
     Package,
     Users,
     Clock,
-    AlertCircle
+    AlertCircle,
+    ShoppingCart,
+    Truck,
+    DollarSign,
+    CheckCircle
 } from 'lucide-react'
 import { ProductFormDialog } from '../components/ProductFormDialog'
 import {
@@ -58,6 +65,13 @@ import {
 import { Label } from '../components/ui/label'
 import { Textarea } from '../components/ui/textarea'
 import { Alert, AlertDescription } from '../components/ui/alert'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '../components/ui/select'
 
 export function AdminPanel() {
     const [activeTab, setActiveTab] = useState('products')
@@ -88,9 +102,24 @@ export function AdminPanel() {
     const [sellers, setSellers] = useState<SellerProfile[]>([])
     const [loadingSellers, setLoadingSellers] = useState(false)
 
+    // Store Orders State
+    const [storeOrders, setStoreOrders] = useState<Order[]>([])
+    const [loadingStoreOrders, setLoadingStoreOrders] = useState(false)
+    const [selectedStoreOrder, setSelectedStoreOrder] = useState<Order | null>(null)
+    const [storeOrderDialogOpen, setStoreOrderDialogOpen] = useState(false)
+    const [newStoreOrderStatus, setNewStoreOrderStatus] = useState<string>('')
+
+    // Marketplace Orders State
+    const [marketplaceOrders, setMarketplaceOrders] = useState<MarketplaceOrder[]>([])
+    const [loadingMarketplaceOrders, setLoadingMarketplaceOrders] = useState(false)
+    const [selectedMarketplaceOrder, setSelectedMarketplaceOrder] = useState<MarketplaceOrder | null>(null)
+    const [marketplaceOrderDialogOpen, setMarketplaceOrderDialogOpen] = useState(false)
+
     // Stats
     const [pendingRequestsCount, setPendingRequestsCount] = useState(0)
     const [pendingProductsCount, setPendingProductsCount] = useState(0)
+    const [pendingStoreOrdersCount, setPendingStoreOrdersCount] = useState(0)
+    const [pendingMarketplaceOrdersCount, setPendingMarketplaceOrdersCount] = useState(0)
 
     useEffect(() => {
         loadProducts()
@@ -104,6 +133,10 @@ export function AdminPanel() {
             loadMarketplaceProducts()
         } else if (activeTab === 'sellers') {
             loadSellers()
+        } else if (activeTab === 'store-orders') {
+            loadStoreOrders()
+        } else if (activeTab === 'marketplace-orders') {
+            loadMarketplaceOrders()
         }
     }, [activeTab])
 
@@ -113,6 +146,18 @@ export function AdminPanel() {
             setPendingRequestsCount(requests.length)
             const products = await usedProductService.getPendingProducts()
             setPendingProductsCount(products.length)
+
+            // Load store orders stats
+            const allStoreOrders = await orderService.getAllOrders()
+            const pendingStore = allStoreOrders.filter(o => o.status === 'pending' || o.status === 'processing')
+            setPendingStoreOrdersCount(pendingStore.length)
+
+            // Load marketplace orders stats
+            const allMarketplaceOrders = await marketplaceOrderService.getAllOrders()
+            const pendingMarketplace = allMarketplaceOrders.filter(o =>
+                o.status === 'pending' || o.status === 'paid' || o.status === 'shipped' || o.status === 'delivered'
+            )
+            setPendingMarketplaceOrdersCount(pendingMarketplace.length)
         } catch (error) {
             console.error('Failed to load stats:', error)
         }
@@ -163,6 +208,30 @@ export function AdminPanel() {
             console.error('Failed to load sellers:', error)
         } finally {
             setLoadingSellers(false)
+        }
+    }
+
+    const loadStoreOrders = async () => {
+        try {
+            setLoadingStoreOrders(true)
+            const data = await orderService.getAllOrders()
+            setStoreOrders(data)
+        } catch (error) {
+            console.error('Failed to load store orders:', error)
+        } finally {
+            setLoadingStoreOrders(false)
+        }
+    }
+
+    const loadMarketplaceOrders = async () => {
+        try {
+            setLoadingMarketplaceOrders(true)
+            const data = await marketplaceOrderService.getAllOrders()
+            setMarketplaceOrders(data)
+        } catch (error) {
+            console.error('Failed to load marketplace orders:', error)
+        } finally {
+            setLoadingMarketplaceOrders(false)
         }
     }
 
@@ -257,6 +326,55 @@ export function AdminPanel() {
         }
     }
 
+    // Store Order Handlers
+    const handleViewStoreOrder = (order: Order) => {
+        setSelectedStoreOrder(order)
+        setNewStoreOrderStatus(order.status)
+        setStoreOrderDialogOpen(true)
+    }
+
+    const handleUpdateStoreOrderStatus = async () => {
+        if (!selectedStoreOrder?.$id || !newStoreOrderStatus) return
+        try {
+            await orderService.updateOrderStatus(selectedStoreOrder.$id, newStoreOrderStatus as any)
+            setStoreOrderDialogOpen(false)
+            await loadStoreOrders()
+            await loadStats()
+        } catch (error) {
+            console.error('Failed to update store order status:', error)
+        }
+    }
+
+    // Marketplace Order Handlers
+    const handleViewMarketplaceOrder = (order: MarketplaceOrder) => {
+        setSelectedMarketplaceOrder(order)
+        setMarketplaceOrderDialogOpen(true)
+    }
+
+    const handleConfirmMarketplaceOrder = async () => {
+        if (!selectedMarketplaceOrder?.$id) return
+        try {
+            await marketplaceOrderService.adminConfirmDelivery(selectedMarketplaceOrder.$id)
+            setMarketplaceOrderDialogOpen(false)
+            await loadMarketplaceOrders()
+            await loadStats()
+        } catch (error) {
+            console.error('Failed to confirm marketplace order:', error)
+        }
+    }
+
+    const handleUpdateMarketplaceOrderStatus = async (status: string) => {
+        if (!selectedMarketplaceOrder?.$id) return
+        try {
+            await marketplaceOrderService.adminUpdateOrderStatus(selectedMarketplaceOrder.$id, status as any)
+            setMarketplaceOrderDialogOpen(false)
+            await loadMarketplaceOrders()
+            await loadStats()
+        } catch (error) {
+            console.error('Failed to update marketplace order status:', error)
+        }
+    }
+
     const getStatusBadge = (status: string) => {
         switch (status) {
             case 'pending':
@@ -267,6 +385,22 @@ export function AdminPanel() {
                 return <Badge variant="outline" className="bg-red-100 text-red-800">Rejected</Badge>
             case 'sold':
                 return <Badge variant="outline" className="bg-blue-100 text-blue-800">Sold</Badge>
+            case 'processing':
+                return <Badge variant="outline" className="bg-blue-100 text-blue-800">Processing</Badge>
+            case 'shipped':
+                return <Badge variant="outline" className="bg-purple-100 text-purple-800">Shipped</Badge>
+            case 'delivered':
+                return <Badge variant="outline" className="bg-teal-100 text-teal-800">Delivered</Badge>
+            case 'confirmed':
+                return <Badge variant="outline" className="bg-green-100 text-green-800">Confirmed</Badge>
+            case 'paid':
+                return <Badge variant="outline" className="bg-emerald-100 text-emerald-800">Paid</Badge>
+            case 'cancelled':
+                return <Badge variant="outline" className="bg-red-100 text-red-800">Cancelled</Badge>
+            case 'refunded':
+                return <Badge variant="outline" className="bg-gray-100 text-gray-800">Refunded</Badge>
+            case 'disputed':
+                return <Badge variant="outline" className="bg-orange-100 text-orange-800">Disputed</Badge>
             default:
                 return <Badge variant="outline">{status}</Badge>
         }
@@ -291,7 +425,7 @@ export function AdminPanel() {
                     </div>
 
                     {/* Stats Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
                         <Card>
                             <CardContent className="p-4 flex items-center gap-4">
                                 <div className="p-3 bg-primary/10 rounded-lg">
@@ -310,7 +444,7 @@ export function AdminPanel() {
                                 </div>
                                 <div>
                                     <p className="text-2xl font-bold">{pendingRequestsCount}</p>
-                                    <p className="text-sm text-muted-foreground">Pending Seller Requests</p>
+                                    <p className="text-sm text-muted-foreground">Seller Requests</p>
                                 </div>
                             </CardContent>
                         </Card>
@@ -322,6 +456,28 @@ export function AdminPanel() {
                                 <div>
                                     <p className="text-2xl font-bold">{pendingProductsCount}</p>
                                     <p className="text-sm text-muted-foreground">Pending Products</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardContent className="p-4 flex items-center gap-4">
+                                <div className="p-3 bg-blue-100 rounded-lg">
+                                    <ShoppingCart className="h-6 w-6 text-blue-600" />
+                                </div>
+                                <div>
+                                    <p className="text-2xl font-bold">{pendingStoreOrdersCount}</p>
+                                    <p className="text-sm text-muted-foreground">Store Orders</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardContent className="p-4 flex items-center gap-4">
+                                <div className="p-3 bg-purple-100 rounded-lg">
+                                    <DollarSign className="h-6 w-6 text-purple-600" />
+                                </div>
+                                <div>
+                                    <p className="text-2xl font-bold">{pendingMarketplaceOrdersCount}</p>
+                                    <p className="text-sm text-muted-foreground">MP Orders</p>
                                 </div>
                             </CardContent>
                         </Card>
@@ -339,10 +495,24 @@ export function AdminPanel() {
                     </div>
 
                     <Tabs value={activeTab} onValueChange={setActiveTab}>
-                        <TabsList className="mb-6">
+                        <TabsList className="mb-6 flex-wrap">
                             <TabsTrigger value="products" className="flex items-center gap-2">
                                 <Package className="h-4 w-4" />
                                 Store Products
+                            </TabsTrigger>
+                            <TabsTrigger value="store-orders" className="flex items-center gap-2">
+                                <ShoppingCart className="h-4 w-4" />
+                                Store Orders
+                                {pendingStoreOrdersCount > 0 && (
+                                    <Badge variant="destructive" className="ml-1">{pendingStoreOrdersCount}</Badge>
+                                )}
+                            </TabsTrigger>
+                            <TabsTrigger value="marketplace-orders" className="flex items-center gap-2">
+                                <DollarSign className="h-4 w-4" />
+                                MP Orders
+                                {pendingMarketplaceOrdersCount > 0 && (
+                                    <Badge variant="destructive" className="ml-1">{pendingMarketplaceOrdersCount}</Badge>
+                                )}
                             </TabsTrigger>
                             <TabsTrigger value="seller-requests" className="flex items-center gap-2">
                                 <UserCheck className="h-4 w-4" />
@@ -353,7 +523,7 @@ export function AdminPanel() {
                             </TabsTrigger>
                             <TabsTrigger value="marketplace-products" className="flex items-center gap-2">
                                 <Store className="h-4 w-4" />
-                                Marketplace Products
+                                MP Products
                                 {pendingProductsCount > 0 && (
                                     <Badge variant="destructive" className="ml-1">{pendingProductsCount}</Badge>
                                 )}
@@ -434,6 +604,154 @@ export function AdminPanel() {
                                                                         <Trash2 className="w-4 h-4 text-destructive" />
                                                                     </Button>
                                                                 </div>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </TabsContent>
+
+                        {/* Store Orders Tab */}
+                        <TabsContent value="store-orders">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Store Orders</CardTitle>
+                                    <CardDescription>
+                                        Manage and update status of store orders
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {loadingStoreOrders ? (
+                                        <div className="text-center py-8">
+                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
+                                        </div>
+                                    ) : storeOrders.length === 0 ? (
+                                        <div className="text-center py-8 text-muted-foreground">
+                                            No store orders yet.
+                                        </div>
+                                    ) : (
+                                        <div className="rounded-md border">
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>Order ID</TableHead>
+                                                        <TableHead>Customer</TableHead>
+                                                        <TableHead>Items</TableHead>
+                                                        <TableHead>Total</TableHead>
+                                                        <TableHead>Status</TableHead>
+                                                        <TableHead>Date</TableHead>
+                                                        <TableHead className="text-right">Actions</TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody>
+                                                    {storeOrders.map((order) => (
+                                                        <TableRow key={order.$id}>
+                                                            <TableCell className="font-mono text-xs">
+                                                                #{order.$id?.slice(-8).toUpperCase()}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <div>
+                                                                    <div className="font-medium">{order.userName}</div>
+                                                                    <div className="text-xs text-muted-foreground">{order.userEmail}</div>
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell>{order.items?.length || 0} items</TableCell>
+                                                            <TableCell className="font-bold">${order.totalAmount.toFixed(2)}</TableCell>
+                                                            <TableCell>{getStatusBadge(order.status)}</TableCell>
+                                                            <TableCell>
+                                                                {new Date(order.$createdAt!).toLocaleDateString()}
+                                                            </TableCell>
+                                                            <TableCell className="text-right">
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    onClick={() => handleViewStoreOrder(order)}
+                                                                >
+                                                                    <Eye className="w-4 h-4" />
+                                                                </Button>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </TabsContent>
+
+                        {/* Marketplace Orders Tab */}
+                        <TabsContent value="marketplace-orders">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Marketplace Orders</CardTitle>
+                                    <CardDescription>
+                                        Confirm deliveries and release funds to sellers
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {loadingMarketplaceOrders ? (
+                                        <div className="text-center py-8">
+                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
+                                        </div>
+                                    ) : marketplaceOrders.length === 0 ? (
+                                        <div className="text-center py-8 text-muted-foreground">
+                                            No marketplace orders yet.
+                                        </div>
+                                    ) : (
+                                        <div className="rounded-md border">
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead className="w-[60px]">Image</TableHead>
+                                                        <TableHead>Product</TableHead>
+                                                        <TableHead>Seller</TableHead>
+                                                        <TableHead>Buyer</TableHead>
+                                                        <TableHead>Price</TableHead>
+                                                        <TableHead>Status</TableHead>
+                                                        <TableHead>Date</TableHead>
+                                                        <TableHead className="text-right">Actions</TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody>
+                                                    {marketplaceOrders.map((order) => (
+                                                        <TableRow key={order.$id}>
+                                                            <TableCell>
+                                                                <img
+                                                                    src={order.productImage}
+                                                                    alt={order.productName}
+                                                                    className="w-10 h-10 object-cover rounded"
+                                                                />
+                                                            </TableCell>
+                                                            <TableCell className="font-medium max-w-[150px] truncate">
+                                                                {order.productName}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <div className="text-sm">{order.sellerName}</div>
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <div>
+                                                                    <div className="text-sm">{order.buyerName}</div>
+                                                                    <div className="text-xs text-muted-foreground">{order.buyerEmail}</div>
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell className="font-bold">${order.productPrice}</TableCell>
+                                                            <TableCell>{getStatusBadge(order.status)}</TableCell>
+                                                            <TableCell>
+                                                                {new Date(order.$createdAt!).toLocaleDateString()}
+                                                            </TableCell>
+                                                            <TableCell className="text-right">
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    onClick={() => handleViewMarketplaceOrder(order)}
+                                                                >
+                                                                    <Eye className="w-4 h-4" />
+                                                                </Button>
                                                             </TableCell>
                                                         </TableRow>
                                                     ))}
@@ -908,6 +1226,221 @@ export function AdminPanel() {
                                         </DialogFooter>
                                     </>
                                 )}
+                            </div>
+                        )}
+                    </DialogContent>
+                </Dialog>
+
+                {/* Store Order Review Dialog */}
+                <Dialog open={storeOrderDialogOpen} onOpenChange={setStoreOrderDialogOpen}>
+                    <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+                        <DialogHeader>
+                            <DialogTitle>Store Order Details</DialogTitle>
+                            <DialogDescription>
+                                Review and update order status
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        {selectedStoreOrder && (
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <Label className="text-muted-foreground">Order ID</Label>
+                                        <p className="font-mono font-medium">#{selectedStoreOrder.$id?.slice(-8).toUpperCase()}</p>
+                                    </div>
+                                    <div>
+                                        <Label className="text-muted-foreground">Status</Label>
+                                        <div className="mt-1">{getStatusBadge(selectedStoreOrder.status)}</div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <Label className="text-muted-foreground">Customer</Label>
+                                        <p className="font-medium">{selectedStoreOrder.userName}</p>
+                                        <p className="text-sm text-muted-foreground">{selectedStoreOrder.userEmail}</p>
+                                    </div>
+                                    <div>
+                                        <Label className="text-muted-foreground">Order Date</Label>
+                                        <p className="font-medium">
+                                            {new Date(selectedStoreOrder.$createdAt!).toLocaleString()}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <Label className="text-muted-foreground">Shipping Address</Label>
+                                    <p className="font-medium">
+                                        {selectedStoreOrder.shippingAddress}, {selectedStoreOrder.shippingCity}, {selectedStoreOrder.shippingZip}, {selectedStoreOrder.shippingCountry}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <Label className="text-muted-foreground">Items</Label>
+                                    <div className="mt-2 space-y-2">
+                                        {selectedStoreOrder.items?.map((item) => (
+                                            <div key={item.$id} className="flex items-center gap-3 p-2 bg-muted rounded">
+                                                <img src={item.productImage} alt={item.productName} className="w-12 h-12 object-cover rounded" />
+                                                <div className="flex-1">
+                                                    <p className="font-medium">{item.productName}</p>
+                                                    <p className="text-sm text-muted-foreground">Qty: {item.quantity} × ${item.price}</p>
+                                                </div>
+                                                <p className="font-bold">${(item.quantity * item.price).toFixed(2)}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-between items-center p-3 bg-primary/10 rounded">
+                                    <span className="font-semibold">Total Amount</span>
+                                    <span className="text-xl font-bold text-primary">${selectedStoreOrder.totalAmount.toFixed(2)}</span>
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="orderStatus">Update Status</Label>
+                                    <Select value={newStoreOrderStatus} onValueChange={setNewStoreOrderStatus}>
+                                        <SelectTrigger className="mt-2">
+                                            <SelectValue placeholder="Select status" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="pending">Pending</SelectItem>
+                                            <SelectItem value="processing">Processing</SelectItem>
+                                            <SelectItem value="shipped">Shipped</SelectItem>
+                                            <SelectItem value="delivered">Delivered</SelectItem>
+                                            <SelectItem value="cancelled">Cancelled</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <DialogFooter>
+                                    <Button variant="outline" onClick={() => setStoreOrderDialogOpen(false)}>
+                                        Cancel
+                                    </Button>
+                                    <Button onClick={handleUpdateStoreOrderStatus}>
+                                        <Check className="w-4 h-4 mr-2" />
+                                        Update Status
+                                    </Button>
+                                </DialogFooter>
+                            </div>
+                        )}
+                    </DialogContent>
+                </Dialog>
+
+                {/* Marketplace Order Review Dialog */}
+                <Dialog open={marketplaceOrderDialogOpen} onOpenChange={setMarketplaceOrderDialogOpen}>
+                    <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+                        <DialogHeader>
+                            <DialogTitle>Marketplace Order Details</DialogTitle>
+                            <DialogDescription>
+                                Review order and confirm delivery to release funds
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        {selectedMarketplaceOrder && (
+                            <div className="space-y-4">
+                                <div className="flex gap-4">
+                                    <img
+                                        src={selectedMarketplaceOrder.productImage}
+                                        alt={selectedMarketplaceOrder.productName}
+                                        className="w-24 h-24 object-cover rounded"
+                                    />
+                                    <div className="flex-1">
+                                        <h3 className="font-semibold text-lg">{selectedMarketplaceOrder.productName}</h3>
+                                        <p className="text-2xl font-bold text-primary">${selectedMarketplaceOrder.productPrice}</p>
+                                        <div className="mt-1">{getStatusBadge(selectedMarketplaceOrder.status)}</div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <Label className="text-muted-foreground">Seller</Label>
+                                        <p className="font-medium">{selectedMarketplaceOrder.sellerName}</p>
+                                    </div>
+                                    <div>
+                                        <Label className="text-muted-foreground">Buyer</Label>
+                                        <p className="font-medium">{selectedMarketplaceOrder.buyerName}</p>
+                                        <p className="text-sm text-muted-foreground">{selectedMarketplaceOrder.buyerEmail}</p>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <Label className="text-muted-foreground">Shipping Address</Label>
+                                    <p className="font-medium">
+                                        {selectedMarketplaceOrder.shippingAddress}, {selectedMarketplaceOrder.shippingCity}, {selectedMarketplaceOrder.shippingZip}, {selectedMarketplaceOrder.shippingCountry}
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <Label className="text-muted-foreground">Order Date</Label>
+                                        <p className="font-medium">
+                                            {new Date(selectedMarketplaceOrder.$createdAt!).toLocaleString()}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <Label className="text-muted-foreground">Payment Method</Label>
+                                        <p className="font-medium">{selectedMarketplaceOrder.paymentMethod}</p>
+                                    </div>
+                                </div>
+
+                                {selectedMarketplaceOrder.trackingNumber && (
+                                    <div>
+                                        <Label className="text-muted-foreground">Tracking Number</Label>
+                                        <p className="font-medium font-mono">{selectedMarketplaceOrder.trackingNumber}</p>
+                                    </div>
+                                )}
+
+                                {selectedMarketplaceOrder.deliveryConfirmedAt && (
+                                    <Alert className="bg-green-50 border-green-200">
+                                        <CheckCircle className="h-4 w-4 text-green-600" />
+                                        <AlertDescription className="text-green-800">
+                                            Delivery confirmed on {new Date(selectedMarketplaceOrder.deliveryConfirmedAt).toLocaleString()}
+                                        </AlertDescription>
+                                    </Alert>
+                                )}
+
+                                {selectedMarketplaceOrder.status !== 'confirmed' && selectedMarketplaceOrder.status !== 'refunded' && (
+                                    <Alert className="bg-yellow-50 border-yellow-200">
+                                        <DollarSign className="h-4 w-4 text-yellow-600" />
+                                        <AlertDescription className="text-yellow-800">
+                                            Funds (${selectedMarketplaceOrder.productPrice}) are in pending balance. Confirm delivery to release funds to seller.
+                                        </AlertDescription>
+                                    </Alert>
+                                )}
+
+                                <DialogFooter className="gap-2 flex-wrap">
+                                    {selectedMarketplaceOrder.status === 'pending' && (
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => handleUpdateMarketplaceOrderStatus('paid')}
+                                        >
+                                            Mark as Paid
+                                        </Button>
+                                    )}
+                                    {selectedMarketplaceOrder.status === 'paid' && (
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => handleUpdateMarketplaceOrderStatus('shipped')}
+                                        >
+                                            <Truck className="w-4 h-4 mr-2" />
+                                            Mark as Shipped
+                                        </Button>
+                                    )}
+                                    {selectedMarketplaceOrder.status === 'shipped' && (
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => handleUpdateMarketplaceOrderStatus('delivered')}
+                                        >
+                                            Mark as Delivered
+                                        </Button>
+                                    )}
+                                    {['delivered', 'shipped', 'paid'].includes(selectedMarketplaceOrder.status) && (
+                                        <Button onClick={handleConfirmMarketplaceOrder}>
+                                            <CheckCircle className="w-4 h-4 mr-2" />
+                                            Confirm & Release Funds
+                                        </Button>
+                                    )}
+                                </DialogFooter>
                             </div>
                         )}
                     </DialogContent>

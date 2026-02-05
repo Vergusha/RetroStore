@@ -504,14 +504,31 @@ function ProfilePage() {
                                                         />
                                                         <div className="flex-1">
                                                             <p className="font-medium">{order.productName}</p>
-                                                            <p className="text-sm text-muted-foreground">
+                                                            <Link
+                                                                to="/seller/$sellerId"
+                                                                params={{ sellerId: order.sellerId }}
+                                                                className="text-sm text-primary hover:underline"
+                                                            >
                                                                 Seller: {order.sellerName}
-                                                            </p>
+                                                            </Link>
                                                         </div>
                                                         <Badge className={getStatusColor(order.status)}>
                                                             {order.status}
                                                         </Badge>
                                                         <span className="font-bold">${order.productPrice}</span>
+                                                        {order.status === 'confirmed' && (
+                                                            <Button
+                                                                size="sm"
+                                                                variant="outline"
+                                                                onClick={() => {
+                                                                    setSelectedOrderForReview(order)
+                                                                    setReviewDialogOpen(true)
+                                                                }}
+                                                            >
+                                                                <Star className="w-4 h-4 mr-1" />
+                                                                Review
+                                                            </Button>
+                                                        )}
                                                         {(order.status === 'shipped' || order.status === 'delivered') && (
                                                             <Button size="sm" onClick={() => handleConfirmDelivery(order)}>
                                                                 <CheckCircle className="w-4 h-4 mr-1" />
@@ -606,13 +623,30 @@ function ProfilePage() {
                                                     />
                                                     <div className="flex-1">
                                                         <p className="font-medium">{order.productName}</p>
-                                                        <p className="text-sm text-muted-foreground">
+                                                        <Link
+                                                            to="/seller/$sellerId"
+                                                            params={{ sellerId: order.sellerId }}
+                                                            className="text-sm text-primary hover:underline"
+                                                        >
                                                             from {order.sellerName}
-                                                        </p>
+                                                        </Link>
                                                     </div>
                                                     <Badge className={getStatusColor(order.status)}>
                                                         {order.status}
                                                     </Badge>
+                                                    {order.status === 'confirmed' && (
+                                                        <Button
+                                                            size="sm"
+                                                            variant="outline"
+                                                            onClick={() => {
+                                                                setSelectedOrderForReview(order)
+                                                                setReviewDialogOpen(true)
+                                                            }}
+                                                        >
+                                                            <Star className="w-4 h-4 mr-1" />
+                                                            Review
+                                                        </Button>
+                                                    )}
                                                     {(order.status === 'shipped' || order.status === 'delivered') && (
                                                         <Button size="sm" onClick={() => handleConfirmDelivery(order)}>
                                                             <CheckCircle className="w-4 h-4 mr-1" />
