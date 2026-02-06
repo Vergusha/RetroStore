@@ -7,10 +7,12 @@ import {
     usedProductService,
     sellerProfileService,
     marketplaceOrderService,
+    reviewService,
     type SellerRequest,
     type UsedProduct,
     type SellerProfile,
     type MarketplaceOrder,
+    type SellerReviewWithProduct,
 } from '../lib/marketplace'
 import { Button } from '../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card'
@@ -32,7 +34,9 @@ import {
     ShoppingCart,
     Truck,
     DollarSign,
-    CheckCircle
+    CheckCircle,
+    Star,
+    MessageSquare
 } from 'lucide-react'
 import { ProductFormDialog } from '../components/ProductFormDialog'
 import {
@@ -115,6 +119,10 @@ export function AdminPanel() {
     const [selectedMarketplaceOrder, setSelectedMarketplaceOrder] = useState<MarketplaceOrder | null>(null)
     const [marketplaceOrderDialogOpen, setMarketplaceOrderDialogOpen] = useState(false)
 
+    // Reviews State
+    const [reviews, setReviews] = useState<SellerReviewWithProduct[]>([])
+    const [loadingReviews, setLoadingReviews] = useState(false)
+
     // Stats
     const [pendingRequestsCount, setPendingRequestsCount] = useState(0)
     const [pendingProductsCount, setPendingProductsCount] = useState(0)
@@ -137,6 +145,8 @@ export function AdminPanel() {
             loadStoreOrders()
         } else if (activeTab === 'marketplace-orders') {
             loadMarketplaceOrders()
+        } else if (activeTab === 'reviews') {
+            loadReviews()
         }
     }, [activeTab])
 
@@ -232,6 +242,18 @@ export function AdminPanel() {
             console.error('Failed to load marketplace orders:', error)
         } finally {
             setLoadingMarketplaceOrders(false)
+        }
+    }
+
+    const loadReviews = async () => {
+        try {
+            setLoadingReviews(true)
+            const data = await reviewService.getAllReviews()
+            setReviews(data)
+        } catch (error) {
+            console.error('Failed to load reviews:', error)
+        } finally {
+            setLoadingReviews(false)
         }
     }
 
@@ -531,6 +553,10 @@ export function AdminPanel() {
                             <TabsTrigger value="sellers" className="flex items-center gap-2">
                                 <Users className="h-4 w-4" />
                                 Sellers
+                            </TabsTrigger>
+                            <TabsTrigger value="reviews" className="flex items-center gap-2">
+                                <MessageSquare className="h-4 w-4" />
+                                Reviews
                             </TabsTrigger>
                         </TabsList>
 
@@ -975,6 +1001,81 @@ export function AdminPanel() {
                                                             </TableCell>
                                                             <TableCell>
                                                                 {new Date(seller.$createdAt!).toLocaleDateString()}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </TabsContent>
+
+                        {/* Reviews Tab */}
+                        <TabsContent value="reviews">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2">
+                                        <MessageSquare className="h-5 w-5" />
+                                        User Reviews ({reviews.length})
+                                    </CardTitle>
+                                    <CardDescription>
+                                        All reviews left by buyers for marketplace products
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {loadingReviews ? (
+                                        <div className="text-center py-8">
+                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
+                                        </div>
+                                    ) : reviews.length === 0 ? (
+                                        <div className="text-center py-8 text-muted-foreground">
+                                            No reviews yet
+                                        </div>
+                                    ) : (
+                                        <div className="rounded-md border">
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>Product</TableHead>
+                                                        <TableHead>Buyer</TableHead>
+                                                        <TableHead>Seller</TableHead>
+                                                        <TableHead>Rating</TableHead>
+                                                        <TableHead>Comment</TableHead>
+                                                        <TableHead>Date</TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody>
+                                                    {reviews.map((review) => (
+                                                        <TableRow key={review.$id}>
+                                                            <TableCell>
+                                                                <div className="font-medium">
+                                                                    {review.productName || 'Unknown Product'}
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell>{review.buyerName}</TableCell>
+                                                            <TableCell>{review.sellerName || 'Unknown'}</TableCell>
+                                                            <TableCell>
+                                                                <div className="flex items-center gap-1">
+                                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                                        <Star
+                                                                            key={star}
+                                                                            className={`h-4 w-4 ${star <= review.rating
+                                                                                ? 'text-yellow-500 fill-yellow-500'
+                                                                                : 'text-gray-300'
+                                                                                }`}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <div className="max-w-xs truncate" title={review.comment}>
+                                                                    {review.comment}
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {new Date(review.$createdAt!).toLocaleDateString()}
                                                             </TableCell>
                                                         </TableRow>
                                                     ))}

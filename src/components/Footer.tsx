@@ -1,5 +1,5 @@
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube, Gamepad2 } from 'lucide-react'
-import { Button } from './ui/button'
+import { Mail, Phone, MapPin, Gamepad2 } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 
 export function Footer() {
     return (
@@ -20,38 +20,16 @@ export function Footer() {
                         <p className="text-sm text-muted-foreground leading-relaxed">
                             Your trusted source for retro and modern gaming consoles. Quality and authenticity guaranteed.
                         </p>
-                        <div className="flex gap-2">
-                            <Button variant="outline" size="icon" className="hover:bg-primary hover:text-primary-foreground" asChild>
-                                <a href="#" aria-label="Facebook">
-                                    <Facebook className="w-4 h-4" />
-                                </a>
-                            </Button>
-                            <Button variant="outline" size="icon" className="hover:bg-primary hover:text-primary-foreground" asChild>
-                                <a href="#" aria-label="Twitter">
-                                    <Twitter className="w-4 h-4" />
-                                </a>
-                            </Button>
-                            <Button variant="outline" size="icon" className="hover:bg-primary hover:text-primary-foreground" asChild>
-                                <a href="#" aria-label="Instagram">
-                                    <Instagram className="w-4 h-4" />
-                                </a>
-                            </Button>
-                            <Button variant="outline" size="icon" className="hover:bg-primary hover:text-primary-foreground" asChild>
-                                <a href="#" aria-label="YouTube">
-                                    <Youtube className="w-4 h-4" />
-                                </a>
-                            </Button>
-                        </div>
                     </div>
 
                     {/* Quick Links */}
                     <div className="space-y-4">
                         <h4 className="text-sm font-bold">Quick Links</h4>
                         <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li><a href="/" className="hover:text-primary transition-colors">Home</a></li>
-                            <li><a href="/products" className="hover:text-primary transition-colors">Consoles</a></li>
-                            <li><a href="/categories" className="hover:text-primary transition-colors">Categories</a></li>
-                            <li><a href="/about" className="hover:text-primary transition-colors">About</a></li>
+                            <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
+                            <li><Link to="/products" className="hover:text-primary transition-colors">Consoles</Link></li>
+                            <li><Link to="/categories" className="hover:text-primary transition-colors">Categories</Link></li>
+                            <li><Link to="/about" className="hover:text-primary transition-colors">About</Link></li>
                         </ul>
                     </div>
 
@@ -59,10 +37,10 @@ export function Footer() {
                     <div className="space-y-4">
                         <h4 className="text-sm font-bold">Customer Service</h4>
                         <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li><a href="/faq" className="hover:text-primary transition-colors">FAQ</a></li>
-                            <li><a href="/shipping" className="hover:text-primary transition-colors">Shipping</a></li>
-                            <li><a href="/returns" className="hover:text-primary transition-colors">Returns</a></li>
-                            <li><a href="/payment" className="hover:text-primary transition-colors">Payment</a></li>
+                            <li><Link to="/faq" className="hover:text-primary transition-colors">FAQ</Link></li>
+                            <li><Link to="/shipping" className="hover:text-primary transition-colors">Shipping</Link></li>
+                            <li><Link to="/returns" className="hover:text-primary transition-colors">Returns</Link></li>
+                            <li><Link to="/payment" className="hover:text-primary transition-colors">Payment</Link></li>
                         </ul>
                     </div>
 

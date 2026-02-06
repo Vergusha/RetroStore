@@ -964,8 +964,61 @@ export const marketplaceOrderService = {
     }
 }
 
+// Extended review interface with product info
+export interface SellerReviewWithProduct extends SellerReview {
+    productName?: string
+    productId?: string
+    sellerName?: string
+}
+
 // Review Service
 export const reviewService = {
+    // Get all reviews (for admin)
+    async getAllReviews(): Promise<SellerReviewWithProduct[]> {
+        try {
+            const response = await databases.listDocuments(
+                DATABASE_ID,
+                SELLER_REVIEWS_COLLECTION_ID,
+                [
+                    Query.orderDesc('$createdAt'),
+                    Query.limit(100)
+                ]
+            )
+            const reviews = response.documents as unknown as SellerReview[]
+
+            // Enrich reviews with product info from orders
+            const enrichedReviews: SellerReviewWithProduct[] = await Promise.all(
+                reviews.map(async (review) => {
+                    try {
+                        const order = await databases.getDocument(
+                            DATABASE_ID,
+                            MARKETPLACE_ORDERS_COLLECTION_ID,
+                            review.orderId
+                        ) as unknown as MarketplaceOrder
+                        return {
+                            ...review,
+                            productName: order.productName,
+                            productId: order.productId,
+                            sellerName: order.sellerName
+                        }
+                    } catch {
+                        return {
+                            ...review,
+                            productName: 'Unknown Product',
+                            productId: undefined,
+                            sellerName: undefined
+                        }
+                    }
+                })
+            )
+
+            return enrichedReviews
+        } catch (error) {
+            console.error('Error getting all reviews:', error)
+            throw error
+        }
+    },
+
     // Create review
     async createReview(data: {
         orderId: string

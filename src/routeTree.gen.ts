@@ -9,10 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ShippingRouteImport } from './routes/shipping'
+import { Route as ReturnsRouteImport } from './routes/returns'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as PaymentRouteImport } from './routes/payment'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as CartRouteImport } from './routes/cart'
@@ -23,6 +27,16 @@ import { Route as UsedProductProductIdRouteImport } from './routes/used-product.
 import { Route as SellerSellerIdRouteImport } from './routes/seller.$sellerId'
 import { Route as ProductProductIdRouteImport } from './routes/product.$productId'
 
+const ShippingRoute = ShippingRouteImport.update({
+  id: '/shipping',
+  path: '/shipping',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReturnsRoute = ReturnsRouteImport.update({
+  id: '/returns',
+  path: '/returns',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -33,6 +47,11 @@ const ProductsRoute = ProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PaymentRoute = PaymentRouteImport.update({
+  id: '/payment',
+  path: '/payment',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrdersRoute = OrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -41,6 +60,11 @@ const OrdersRoute = OrdersRouteImport.update({
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -96,10 +120,14 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
+  '/faq': typeof FaqRoute
   '/marketplace': typeof MarketplaceRoute
   '/orders': typeof OrdersRoute
+  '/payment': typeof PaymentRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/returns': typeof ReturnsRoute
+  '/shipping': typeof ShippingRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/seller/$sellerId': typeof SellerSellerIdRoute
   '/used-product/$productId': typeof UsedProductProductIdRoute
@@ -111,10 +139,14 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
+  '/faq': typeof FaqRoute
   '/marketplace': typeof MarketplaceRoute
   '/orders': typeof OrdersRoute
+  '/payment': typeof PaymentRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/returns': typeof ReturnsRoute
+  '/shipping': typeof ShippingRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/seller/$sellerId': typeof SellerSellerIdRoute
   '/used-product/$productId': typeof UsedProductProductIdRoute
@@ -127,10 +159,14 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
+  '/faq': typeof FaqRoute
   '/marketplace': typeof MarketplaceRoute
   '/orders': typeof OrdersRoute
+  '/payment': typeof PaymentRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/returns': typeof ReturnsRoute
+  '/shipping': typeof ShippingRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/seller/$sellerId': typeof SellerSellerIdRoute
   '/used-product/$productId': typeof UsedProductProductIdRoute
@@ -144,10 +180,14 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
+    | '/faq'
     | '/marketplace'
     | '/orders'
+    | '/payment'
     | '/products'
     | '/profile'
+    | '/returns'
+    | '/shipping'
     | '/product/$productId'
     | '/seller/$sellerId'
     | '/used-product/$productId'
@@ -159,10 +199,14 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
+    | '/faq'
     | '/marketplace'
     | '/orders'
+    | '/payment'
     | '/products'
     | '/profile'
+    | '/returns'
+    | '/shipping'
     | '/product/$productId'
     | '/seller/$sellerId'
     | '/used-product/$productId'
@@ -174,10 +218,14 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
+    | '/faq'
     | '/marketplace'
     | '/orders'
+    | '/payment'
     | '/products'
     | '/profile'
+    | '/returns'
+    | '/shipping'
     | '/product/$productId'
     | '/seller/$sellerId'
     | '/used-product/$productId'
@@ -190,10 +238,14 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CategoriesRoute: typeof CategoriesRoute
   CheckoutRoute: typeof CheckoutRoute
+  FaqRoute: typeof FaqRoute
   MarketplaceRoute: typeof MarketplaceRoute
   OrdersRoute: typeof OrdersRoute
+  PaymentRoute: typeof PaymentRoute
   ProductsRoute: typeof ProductsRoute
   ProfileRoute: typeof ProfileRoute
+  ReturnsRoute: typeof ReturnsRoute
+  ShippingRoute: typeof ShippingRoute
   ProductProductIdRoute: typeof ProductProductIdRoute
   SellerSellerIdRoute: typeof SellerSellerIdRoute
   UsedProductProductIdRoute: typeof UsedProductProductIdRoute
@@ -201,6 +253,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/shipping': {
+      id: '/shipping'
+      path: '/shipping'
+      fullPath: '/shipping'
+      preLoaderRoute: typeof ShippingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/returns': {
+      id: '/returns'
+      path: '/returns'
+      fullPath: '/returns'
+      preLoaderRoute: typeof ReturnsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -215,6 +281,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/payment': {
+      id: '/payment'
+      path: '/payment'
+      fullPath: '/payment'
+      preLoaderRoute: typeof PaymentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/orders': {
       id: '/orders'
       path: '/orders'
@@ -227,6 +300,13 @@ declare module '@tanstack/react-router' {
       path: '/marketplace'
       fullPath: '/marketplace'
       preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -302,10 +382,14 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CategoriesRoute: CategoriesRoute,
   CheckoutRoute: CheckoutRoute,
+  FaqRoute: FaqRoute,
   MarketplaceRoute: MarketplaceRoute,
   OrdersRoute: OrdersRoute,
+  PaymentRoute: PaymentRoute,
   ProductsRoute: ProductsRoute,
   ProfileRoute: ProfileRoute,
+  ReturnsRoute: ReturnsRoute,
+  ShippingRoute: ShippingRoute,
   ProductProductIdRoute: ProductProductIdRoute,
   SellerSellerIdRoute: SellerSellerIdRoute,
   UsedProductProductIdRoute: UsedProductProductIdRoute,
