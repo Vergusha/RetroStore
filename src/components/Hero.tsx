@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Button } from './ui/button'
-import { Gamepad2, Sparkles, ChevronRight } from 'lucide-react'
+import { Sparkles, ChevronRight } from 'lucide-react'
 
 export function Hero() {
     return (
@@ -56,24 +56,6 @@ export function Hero() {
                                 Visit Marketplace
                             </Link>
                         </Button>
-                    </div>
-
-                    {/* Stats strip */}
-                    <div className="flex items-center justify-center gap-8 md:gap-16 pt-8 animate-in fade-in slide-in-from-bottom-4 duration-700 animate-delay-400">
-                        <div className="text-center">
-                            <div className="text-2xl md:text-3xl font-bold text-foreground">500+</div>
-                            <div className="text-xs md:text-sm text-muted-foreground">Products</div>
-                        </div>
-                        <div className="w-px h-10 bg-border" />
-                        <div className="text-center">
-                            <div className="text-2xl md:text-3xl font-bold text-foreground">50+</div>
-                            <div className="text-xs md:text-sm text-muted-foreground">Sellers</div>
-                        </div>
-                        <div className="w-px h-10 bg-border" />
-                        <div className="text-center">
-                            <div className="text-2xl md:text-3xl font-bold text-foreground">4.9</div>
-                            <div className="text-xs md:text-sm text-muted-foreground">Rating</div>
-                        </div>
                     </div>
                 </div>
             </div>

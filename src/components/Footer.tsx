@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Gamepad2 } from 'lucide-react'
+import { Mail, Gamepad2 } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 
 export function Footer() {
@@ -28,7 +28,8 @@ export function Footer() {
                         <ul className="space-y-2 text-sm text-muted-foreground">
                             <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
                             <li><Link to="/products" className="hover:text-primary transition-colors">Consoles</Link></li>
-                            <li><Link to="/categories" className="hover:text-primary transition-colors">Categories</Link></li>
+                            <li><Link to="/marketplace" className="hover:text-primary transition-colors">Marketplace</Link></li>
+                            <li><Link to="/favorites" className="hover:text-primary transition-colors">My Favorites</Link></li>
                             <li><Link to="/about" className="hover:text-primary transition-colors">About</Link></li>
                         </ul>
                     </div>
@@ -47,20 +48,16 @@ export function Footer() {
                     {/* Contact */}
                     <div className="space-y-4">
                         <h4 className="text-sm font-bold">Contact</h4>
-                        <ul className="space-y-3 text-sm text-muted-foreground">
-                            <li className="flex items-start gap-2">
-                                <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
-                                <span>123 Gaming Street, Console City</span>
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <Phone className="w-4 h-4 flex-shrink-0 text-primary" />
-                                <span>+1 (555) 123-4567</span>
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <Mail className="w-4 h-4 flex-shrink-0 text-primary" />
-                                <span>hello@retrostore.com</span>
-                            </li>
-                        </ul>
+                        <p className="text-sm text-muted-foreground">
+                            Have questions? We'd love to hear from you.
+                        </p>
+                        <a
+                            href="mailto:support@example.com"
+                            className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+                        >
+                            <Mail className="w-4 h-4" />
+                            Contact Us
+                        </a>
                     </div>
                 </div>
 

@@ -15,19 +15,20 @@ const FavoritesContext = createContext<FavoritesContextType | undefined>(undefin
 const FAVORITES_STORAGE_KEY = 'retrostore_favorites'
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
-    const [favorites, setFavorites] = useState<Product[]>([])
-
-    // Load favorites from localStorage on mount
-    useEffect(() => {
-        const stored = localStorage.getItem(FAVORITES_STORAGE_KEY)
-        if (stored) {
-            try {
-                setFavorites(JSON.parse(stored))
-            } catch (e) {
-                console.error('Error parsing favorites from localStorage:', e)
+    const [favorites, setFavorites] = useState<Product[]>(() => {
+        // Initialize from localStorage
+        if (typeof window !== 'undefined') {
+            const stored = localStorage.getItem(FAVORITES_STORAGE_KEY)
+            if (stored) {
+                try {
+                    return JSON.parse(stored)
+                } catch (e) {
+                    console.error('Error parsing favorites from localStorage:', e)
+                }
             }
         }
-    }, [])
+        return []
+    })
 
     // Save favorites to localStorage whenever they change
     useEffect(() => {

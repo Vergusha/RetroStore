@@ -4,6 +4,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { AuthProvider } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import { FavoritesProvider } from './contexts/FavoritesContext'
+import { ToastProvider } from './components/Toast'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -37,7 +38,9 @@ if (rootElement && !rootElement.innerHTML) {
       <AuthProvider>
         <CartProvider>
           <FavoritesProvider>
-            <RouterProvider router={router} />
+            <ToastProvider>
+              <RouterProvider router={router} />
+            </ToastProvider>
           </FavoritesProvider>
         </CartProvider>
       </AuthProvider>

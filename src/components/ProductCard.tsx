@@ -1,10 +1,12 @@
-import { Star, ShoppingCart, Check } from 'lucide-react'
+import { Star, ShoppingCart, Check, Heart } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
 import { Link } from '@tanstack/react-router'
 import type { Product } from '../lib/products'
 import { useCart } from '../contexts/CartContext'
+import { useFavorites } from '../contexts/FavoritesContext'
+import { useToast } from './Toast'
 import { useState } from 'react'
 
 interface ProductCardProps {
@@ -13,8 +15,11 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
     const { addToCart, isInCart } = useCart()
+    const { toggleFavorite, isFavorite } = useFavorites()
+    const { addToast } = useToast()
     const [isAdding, setIsAdding] = useState(false)
     const inCart = isInCart(product.$id!)
+    const favorited = isFavorite(product.$id!)
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault()
@@ -24,9 +29,19 @@ export function ProductCard({ product }: ProductCardProps) {
 
         setIsAdding(true)
         addToCart(product)
+        addToast(`${product.name} added to cart`, 'success')
 
         // Reset animation after short delay
         setTimeout(() => setIsAdding(false), 1000)
+    }
+
+    const handleToggleFavorite = (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        toggleFavorite(product)
+        if (!favorited) {
+            addToast(`${product.name} added to favorites`, 'success')
+        }
     }
 
     return (
@@ -43,6 +58,16 @@ export function ProductCard({ product }: ProductCardProps) {
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />
+                        {/* Favorite button */}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={handleToggleFavorite}
+                            className={`absolute top-3 right-3 bg-background/80 backdrop-blur-sm shadow-md hover:bg-background transition-all ${favorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
+                                }`}
+                        >
+                            <Heart className={`w-4 h-4 ${favorited ? 'fill-red-500' : ''}`} />
+                        </Button>
                         {product.oldPrice && (
                             <Badge variant="destructive" className="absolute top-3 left-3 shadow-lg font-bold">
                                 -{Math.round((1 - product.price / product.oldPrice) * 100)}%
