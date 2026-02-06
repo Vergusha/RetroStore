@@ -16,6 +16,7 @@ import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PaymentRouteImport } from './routes/payment'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CategoriesRouteImport } from './routes/categories'
@@ -60,6 +61,11 @@ const OrdersRoute = OrdersRouteImport.update({
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritesRoute = FavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
   '/faq': typeof FaqRoute
+  '/favorites': typeof FavoritesRoute
   '/marketplace': typeof MarketplaceRoute
   '/orders': typeof OrdersRoute
   '/payment': typeof PaymentRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
   '/faq': typeof FaqRoute
+  '/favorites': typeof FavoritesRoute
   '/marketplace': typeof MarketplaceRoute
   '/orders': typeof OrdersRoute
   '/payment': typeof PaymentRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
   '/faq': typeof FaqRoute
+  '/favorites': typeof FavoritesRoute
   '/marketplace': typeof MarketplaceRoute
   '/orders': typeof OrdersRoute
   '/payment': typeof PaymentRoute
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/checkout'
     | '/faq'
+    | '/favorites'
     | '/marketplace'
     | '/orders'
     | '/payment'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/checkout'
     | '/faq'
+    | '/favorites'
     | '/marketplace'
     | '/orders'
     | '/payment'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/checkout'
     | '/faq'
+    | '/favorites'
     | '/marketplace'
     | '/orders'
     | '/payment'
@@ -239,6 +251,7 @@ export interface RootRouteChildren {
   CategoriesRoute: typeof CategoriesRoute
   CheckoutRoute: typeof CheckoutRoute
   FaqRoute: typeof FaqRoute
+  FavoritesRoute: typeof FavoritesRoute
   MarketplaceRoute: typeof MarketplaceRoute
   OrdersRoute: typeof OrdersRoute
   PaymentRoute: typeof PaymentRoute
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/marketplace'
       fullPath: '/marketplace'
       preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favorites': {
+      id: '/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof FavoritesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -383,6 +403,7 @@ const rootRouteChildren: RootRouteChildren = {
   CategoriesRoute: CategoriesRoute,
   CheckoutRoute: CheckoutRoute,
   FaqRoute: FaqRoute,
+  FavoritesRoute: FavoritesRoute,
   MarketplaceRoute: MarketplaceRoute,
   OrdersRoute: OrdersRoute,
   PaymentRoute: PaymentRoute,

@@ -1,8 +1,13 @@
-import { Search, User, Menu, Gamepad2, LogOut, Shield, Receipt, UserCircle, Store } from 'lucide-react'
+import { Search, User, Gamepad2, LogOut, Shield, Receipt, UserCircle, Store, Heart } from 'lucide-react'
 import { Button } from './ui/button'
+import { Badge } from './ui/badge'
 import { useAuth } from '../contexts/AuthContext'
+import { useFavorites } from '../contexts/FavoritesContext'
 import { AuthDialog } from './AuthDialog'
 import { CartSheet } from './CartSheet'
+import { ThemeToggle } from './ThemeToggle'
+import { MobileNav } from './MobileNav'
+import { SearchDialog } from './SearchDialog'
 import { useState, useEffect } from 'react'
 import { adminService } from '../lib/admin'
 import { Link } from '@tanstack/react-router'
@@ -17,9 +22,12 @@ import {
 
 export function Header() {
     const { user, logout } = useAuth()
+    const { getFavoritesCount } = useFavorites()
     const [authDialogOpen, setAuthDialogOpen] = useState(false)
     const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
     const [isAdmin, setIsAdmin] = useState(false)
+    const [searchOpen, setSearchOpen] = useState(false)
+    const favCount = getFavoritesCount()
 
     useEffect(() => {
         async function checkAdmin() {
@@ -45,6 +53,18 @@ export function Header() {
         setAuthMode('login')
         setAuthDialogOpen(true)
     }
+
+    // Keyboard shortcut for search
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault()
+                setSearchOpen(true)
+            }
+        }
+        document.addEventListener('keydown', handleKeyDown)
+        return () => document.removeEventListener('keydown', handleKeyDown)
+    }, [])
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80 shadow-sm">
@@ -81,15 +101,37 @@ export function Header() {
                             </Link>
                         </Button>
                         <Button variant="ghost" asChild className="font-medium">
-                            <Link to="/about">About</Link>
+                            <Link to="/favorites" className="relative flex items-center gap-1">
+                                <Heart className="w-4 h-4" />
+                                Favorites
+                                {favCount > 0 && (
+                                    <Badge variant="secondary" className="h-5 min-w-5 px-1 flex items-center justify-center text-[10px]">
+                                        {favCount}
+                                    </Badge>
+                                )}
+                            </Link>
                         </Button>
                     </nav>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon" className="hidden sm:flex">
+                    <div className="flex items-center gap-1">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setSearchOpen(true)}
+                            className="hidden sm:flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                        >
+                            <Search className="w-4 h-4" />
+                            <span className="text-sm hidden lg:inline">Search...</span>
+                            <kbd className="pointer-events-none hidden lg:inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+                                ⌘K
+                            </kbd>
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={() => setSearchOpen(true)} className="sm:hidden">
                             <Search className="w-5 h-5" />
                         </Button>
+
+                        <ThemeToggle />
 
                         {user ? (
                             <DropdownMenu>
@@ -141,9 +183,7 @@ export function Header() {
                         )}
 
                         <CartSheet />
-                        <Button variant="ghost" size="icon" className="md:hidden">
-                            <Menu className="w-5 h-5" />
-                        </Button>
+                        <MobileNav />
                     </div>
                 </div>
             </div>
@@ -154,6 +194,7 @@ export function Header() {
                 mode={authMode}
                 onModeChange={setAuthMode}
             />
+            <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
         </header>
     )
 }
