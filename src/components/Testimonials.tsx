@@ -35,7 +35,7 @@ const testimonials: Testimonial[] = [
 
 export function Testimonials() {
     return (
-        <section className="py-20 bg-gradient-to-b from-muted/20 to-background">
+        <section className="py-20">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16 space-y-4">
                     <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
@@ -50,7 +50,7 @@ export function Testimonials() {
                     {testimonials.map((testimonial, index) => (
                         <Card
                             key={index}
-                            className="relative overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                            className="relative overflow-hidden hover:shadow-md transition-shadow"
                         >
                             <CardContent className="pt-8 pb-6 px-6">
                                 <Quote className="w-8 h-8 text-primary/20 absolute top-4 right-4" />

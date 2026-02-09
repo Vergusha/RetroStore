@@ -395,24 +395,30 @@ function MarketplaceProductPage() {
             <Dialog open={buyDialogOpen} onOpenChange={setBuyDialogOpen}>
                 <DialogContent className="sm:max-w-[500px]">
                     {purchaseSuccess ? (
-                        <div className="text-center py-8">
-                            <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                                <CheckCircle className="w-8 h-8 text-green-600" />
+                        <>
+                            <DialogHeader className="sr-only">
+                                <DialogTitle>Purchase Complete</DialogTitle>
+                                <DialogDescription>Your order has been placed</DialogDescription>
+                            </DialogHeader>
+                            <div className="text-center py-8">
+                                <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                                    <CheckCircle className="w-8 h-8 text-green-600" />
+                                </div>
+                                <h3 className="text-lg font-semibold mb-2">Purchase Complete!</h3>
+                                <p className="text-muted-foreground mb-6">
+                                    Your order has been placed. The seller will be notified and will ship your item soon.
+                                    You can track your order in your profile.
+                                </p>
+                                <div className="flex gap-2 justify-center">
+                                    <Button variant="outline" onClick={() => navigate({ to: '/marketplace' })}>
+                                        Continue Shopping
+                                    </Button>
+                                    <Button onClick={() => navigate({ to: '/profile' })}>
+                                        View My Orders
+                                    </Button>
+                                </div>
                             </div>
-                            <h3 className="text-lg font-semibold mb-2">Purchase Complete!</h3>
-                            <p className="text-muted-foreground mb-6">
-                                Your order has been placed. The seller will be notified and will ship your item soon.
-                                You can track your order in your profile.
-                            </p>
-                            <div className="flex gap-2 justify-center">
-                                <Button variant="outline" onClick={() => navigate({ to: '/marketplace' })}>
-                                    Continue Shopping
-                                </Button>
-                                <Button onClick={() => navigate({ to: '/profile' })}>
-                                    View My Orders
-                                </Button>
-                            </div>
-                        </div>
+                        </>
                     ) : (
                         <>
                             <DialogHeader>

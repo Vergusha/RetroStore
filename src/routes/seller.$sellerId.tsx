@@ -191,7 +191,7 @@ function SellerProfilePage() {
                                             <img
                                                 src={product.images[0]}
                                                 alt={product.name}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                className="w-full h-full object-cover"
                                             />
                                             <div className="absolute top-2 left-2">
                                                 <Badge className={CONDITIONS[product.condition]?.color}>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Search, X, Loader2, ArrowRight } from 'lucide-react'
-import { Dialog, DialogContent } from './ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { Input } from './ui/input'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
@@ -68,6 +68,10 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[540px] p-0 gap-0 overflow-hidden">
+                <DialogHeader className="sr-only">
+                    <DialogTitle>Search</DialogTitle>
+                    <DialogDescription>Search products in the store</DialogDescription>
+                </DialogHeader>
                 <div className="flex items-center border-b px-4">
                     <Search className="h-5 w-5 text-muted-foreground shrink-0" />
                     <Input

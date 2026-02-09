@@ -1,4 +1,4 @@
-import { Menu, Home, Package, Grid, Store, Info, Heart, ShoppingBag } from 'lucide-react'
+import { Menu, Package, Store, Info, Heart, ShoppingBag } from 'lucide-react'
 import { Button } from './ui/button'
 import { Link } from '@tanstack/react-router'
 import { useFavorites } from '../contexts/FavoritesContext'
@@ -29,22 +29,14 @@ export function MobileNav() {
             <SheetContent side="left" className="w-[280px]">
                 <SheetHeader>
                     <SheetTitle className="text-left">
-                        <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">RETRO</span>
+                        <span className="text-primary">RETRO</span>
                         <span className="text-foreground">STORE</span>
                     </SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col gap-1 mt-6">
-                    <Link to="/" onClick={handleLinkClick} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors font-medium">
-                        <Home className="w-5 h-5 text-primary" />
-                        Home
-                    </Link>
                     <Link to="/products" search={{ category: undefined }} onClick={handleLinkClick} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors font-medium">
                         <Package className="w-5 h-5 text-primary" />
                         Consoles
-                    </Link>
-                    <Link to="/categories" onClick={handleLinkClick} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors font-medium">
-                        <Grid className="w-5 h-5 text-primary" />
-                        Categories
                     </Link>
                     <Link to="/marketplace" onClick={handleLinkClick} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors font-medium">
                         <Store className="w-5 h-5 text-primary" />

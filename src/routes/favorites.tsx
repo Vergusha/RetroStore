@@ -54,13 +54,13 @@ function FavoritesPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {favorites.map(product => (
-                    <Card key={product.$id} className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                    <Card key={product.$id} className="group overflow-hidden hover:shadow-md transition-shadow">
                         <Link to="/product/$productId" params={{ productId: product.$id! }} className="block">
                             <div className="relative aspect-square overflow-hidden bg-muted">
                                 <img
                                     src={product.image}
                                     alt={product.name}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    className="w-full h-full object-cover"
                                 />
                                 {product.oldPrice && (
                                     <Badge variant="destructive" className="absolute top-3 left-3 shadow-lg font-bold">

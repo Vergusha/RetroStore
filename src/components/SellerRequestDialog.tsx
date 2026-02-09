@@ -191,6 +191,10 @@ export function SellerRequestDialog({
         return (
             <Dialog open={open} onOpenChange={onOpenChange}>
                 <DialogContent className="sm:max-w-[500px]">
+                    <DialogHeader className="sr-only">
+                        <DialogTitle>Seller Request Submitted</DialogTitle>
+                        <DialogDescription>Your seller verification request has been submitted</DialogDescription>
+                    </DialogHeader>
                     <div className="text-center py-8">
                         <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
                             <CheckCircle className="w-8 h-8 text-green-600" />

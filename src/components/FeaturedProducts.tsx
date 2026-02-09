@@ -52,10 +52,10 @@ export function FeaturedProducts() {
         )
     }
     return (
-        <section className="py-20 bg-gradient-to-b from-background to-muted/20">
+        <section className="py-12 md:py-16">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-16 space-y-4">
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-primary/70 bg-clip-text text-transparent">
+                <div className="text-center mb-10 md:mb-12 space-y-4">
+                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
                         Featured Consoles
                     </h2>
                     <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -64,14 +64,8 @@ export function FeaturedProducts() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {products.map((product, index) => (
-                        <div
-                            key={product.$id}
-                            className="animate-in fade-in slide-in-from-bottom-8 duration-500"
-                            style={{ animationDelay: `${index * 100}ms` }}
-                        >
-                            <ProductCard product={product} />
-                        </div>
+                    {products.map(product => (
+                        <ProductCard key={product.$id} product={product} />
                     ))}
                 </div>
 

@@ -7,7 +7,6 @@ import type { Product } from '../lib/products'
 import { useCart } from '../contexts/CartContext'
 import { useFavorites } from '../contexts/FavoritesContext'
 import { useToast } from './Toast'
-import { useState } from 'react'
 
 interface ProductCardProps {
     product: Product
@@ -17,7 +16,6 @@ export function ProductCard({ product }: ProductCardProps) {
     const { addToCart, isInCart } = useCart()
     const { toggleFavorite, isFavorite } = useFavorites()
     const { addToast } = useToast()
-    const [isAdding, setIsAdding] = useState(false)
     const inCart = isInCart(product.$id!)
     const favorited = isFavorite(product.$id!)
 
@@ -27,12 +25,8 @@ export function ProductCard({ product }: ProductCardProps) {
 
         if (product.stock === 0 || inCart) return
 
-        setIsAdding(true)
         addToCart(product)
         addToast(`${product.name} added to cart`, 'success')
-
-        // Reset animation after short delay
-        setTimeout(() => setIsAdding(false), 1000)
     }
 
     const handleToggleFavorite = (e: React.MouseEvent) => {
@@ -50,20 +44,20 @@ export function ProductCard({ product }: ProductCardProps) {
             params={{ productId: product.$id! }}
             className="group block h-full"
         >
-            <Card className="flex flex-col hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full cursor-pointer border-2 hover:border-primary/50">
+            <Card className="flex flex-col hover:shadow-md transition-shadow h-full cursor-pointer">
                 <CardHeader className="p-0">
-                    <div className="relative aspect-square rounded-t-lg overflow-hidden bg-gradient-to-br from-muted to-muted/50">
+                    <div className="relative aspect-square rounded-t-lg overflow-hidden bg-muted">
                         <img
                             src={product.image}
                             alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="w-full h-full object-cover"
                         />
                         {/* Favorite button */}
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={handleToggleFavorite}
-                            className={`absolute top-3 right-3 bg-background/80 backdrop-blur-sm shadow-md hover:bg-background transition-all ${favorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
+                            className={`absolute top-3 right-3 bg-background shadow-sm hover:bg-background transition-colors ${favorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
                                 }`}
                         >
                             <Heart className={`w-4 h-4 ${favorited ? 'fill-red-500' : ''}`} />
@@ -74,7 +68,7 @@ export function ProductCard({ product }: ProductCardProps) {
                             </Badge>
                         )}
                         {product.stock === 0 && (
-                            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center">
+                            <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
                                 <Badge variant="outline" className="text-red-600 bg-background px-4 py-2">
                                     Out of Stock
                                 </Badge>
@@ -95,7 +89,7 @@ export function ProductCard({ product }: ProductCardProps) {
                         {product.description}
                     </p>
                     <div className="flex items-baseline gap-2 mb-3">
-                        <span className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                        <span className="text-3xl font-bold text-primary">
                             ${product.price}
                         </span>
                         {product.oldPrice && (
@@ -119,8 +113,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 </CardContent>
                 <CardFooter className="px-4 pb-4">
                     <Button
-                        className={`w-full shadow-sm hover:shadow-md transition-all ${inCart ? 'bg-green-600 hover:bg-green-700' : ''
-                            } ${isAdding ? 'scale-95' : ''}`}
+                        className={`w-full ${inCart ? 'bg-green-600 hover:bg-green-700' : ''}`}
                         disabled={product.stock === 0}
                         onClick={handleAddToCart}
                     >

@@ -68,7 +68,7 @@ function ToastContainer({ toasts, onRemove }: { toasts: Toast[]; onRemove: (id: 
             {toasts.map(toast => (
                 <div
                     key={toast.id}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg backdrop-blur-sm animate-in slide-in-from-right-5 fade-in duration-300 ${bgColors[toast.type]}`}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg border shadow-sm ${bgColors[toast.type]}`}
                 >
                     {icons[toast.type]}
                     <p className="flex-1 text-sm font-medium">{toast.message}</p>

@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 
 export function Footer() {
     return (
-        <footer className="border-t bg-gradient-to-b from-muted/30 to-muted/50">
+        <footer className="border-t bg-muted/30">
             <div className="container mx-auto px-4 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
                     {/* About */}
@@ -13,7 +13,7 @@ export function Footer() {
                                 <Gamepad2 className="w-5 h-5 text-primary" />
                             </div>
                             <h3 className="text-lg font-bold">
-                                <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">RETRO</span>
+                                <span className="text-primary">RETRO</span>
                                 <span className="text-foreground">STORE</span>
                             </h3>
                         </div>
