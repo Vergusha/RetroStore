@@ -23,7 +23,6 @@ function ProductPage() {
     const { addToCart, isInCart } = useCart();
     const { toggleFavorite, isFavorite } = useFavorites();
     const { addToast } = useToast();
-    const [isAdding, setIsAdding] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
 
     const handleShare = async () => {
@@ -105,8 +104,6 @@ function ProductPage() {
             </div>
         );
     }
-
-    const totalPrice = product.price * quantity;
 
     return (
         <div className="min-h-screen text-white pb-20">
@@ -264,10 +261,8 @@ function ProductPage() {
                                             }`}
                                         onClick={() => {
                                             if (isInCart(product.$id!)) return;
-                                            setIsAdding(true);
                                             addToCart(product, quantity);
                                             addToast("ITEM ACQUIRED", 'success');
-                                            setTimeout(() => setIsAdding(false), 1000);
                                         }}
                                     >
                                         <div className="absolute inset-0 skew-x-12 translate-x-full group-hover/btn:translate-x-[-200%] transition-transform duration-1000 bg-white/30 z-10" />

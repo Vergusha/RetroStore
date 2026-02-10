@@ -14,11 +14,11 @@ const DEFAULT_BRANDS = ['All', 'Nintendo', 'Sega', 'Sony', 'Microsoft', 'Atari']
 const DEFAULT_CATEGORIES = ['All', 'Retro Consoles', 'Modern Consoles', 'Handhelds', 'Accessories', 'Limited Edition', 'Mobile Gaming'];
 
 export function FilterBar({
-    selectedBrand,
-    onBrandChange,
+    selectedBrand: _selectedBrand,
+    onBrandChange: _onBrandChange,
     selectedCategory,
     onCategoryChange,
-    brands = DEFAULT_BRANDS,
+    brands: _brands = DEFAULT_BRANDS,
     categories = DEFAULT_CATEGORIES
 }: FilterBarProps) {
     return (

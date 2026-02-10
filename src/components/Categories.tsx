@@ -99,16 +99,16 @@ export function Categories() {
                         >
                             <Button
                                 variant="outline"
-                                className="h-auto p-6 flex flex-col items-center gap-3 hover:bg-muted transition-colors group w-full rounded-xl"
+                                className="h-auto p-6 flex flex-col items-center gap-3 bg-black border-2 border-primary hover:bg-black hover:border-secondary transition-all duration-300 group w-full rounded-xl"
                             >
-                                <div className="text-primary">
+                                <div className="text-primary group-hover:text-secondary transition-colors duration-300">
                                     {category.icon}
                                 </div>
                                 <div className="text-center space-y-1">
-                                    <h3 className="font-semibold text-sm">
+                                    <h3 className="font-bold text-sm uppercase font-mono text-primary group-hover:text-secondary transition-colors duration-300">
                                         {category.name}
                                     </h3>
-                                    <span className="text-xs text-muted-foreground">
+                                    <span className="text-xs font-mono text-primary/80 group-hover:text-secondary/80 transition-colors duration-300">
                                         {category.itemCount}
                                     </span>
                                 </div>

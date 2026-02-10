@@ -1,11 +1,9 @@
-import { Search, User, Gamepad2, LogOut, Shield, Receipt, UserCircle, Store, Heart } from 'lucide-react'
+import { Search, User, Gamepad2, LogOut, Shield, Receipt, UserCircle } from 'lucide-react'
 import { Button } from './ui/button'
-import { Badge } from './ui/badge'
 import { useAuth } from '../contexts/AuthContext'
 import { useFavorites } from '../contexts/FavoritesContext'
 import { AuthDialog } from './AuthDialog'
 import { CartSheet } from './CartSheet'
-import { ThemeToggle } from './ThemeToggle'
 import { MobileNav } from './MobileNav'
 import { SearchDialog } from './SearchDialog'
 import { useState, useEffect } from 'react'
@@ -139,15 +137,11 @@ export function Header() {
                             <Search className="w-5 h-5" />
                         </Button>
 
-                        {/* Theme Toggle slightly hidden or redesigned? Keep for now but maybe style it retro */}
-                        <ThemeToggle />
-
                         {user ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-none gap-2 font-bold uppercase">
-                                        <User className="w-4 h-4" />
-                                        <span className="hidden sm:inline">{user.name}</span>
+                                    <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-none gap-2 font-bold uppercase" size="icon">
+                                        <User className="w-6 h-6" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="bg-black border-2 border-primary rounded-none shadow-[4px_4px_0px_0px_var(--primary)] text-primary">

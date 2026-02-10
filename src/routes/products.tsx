@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { productService, type Product } from '@/lib/products';
 import { Loader2 } from 'lucide-react';
 import { ProductCard } from '@/components/ProductCard';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { FilterBar } from '@/components/FilterBar';
 
 export const Route = createFileRoute('/products')({
@@ -12,8 +11,6 @@ export const Route = createFileRoute('/products')({
         category: (search.category as string) || undefined,
     }),
 });
-
-type SortOption = 'newest' | 'price-low' | 'price-high' | 'rating';
 
 function Products() {
     const navigate = useNavigate();
@@ -57,14 +54,6 @@ function Products() {
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
             </div>
         );
-    }
-
-    const breadcrumbItems: { label: string; href?: string }[] = [
-        { label: 'Products', href: '/products' }
-    ];
-
-    if (category) {
-        breadcrumbItems.push({ label: category });
     }
 
     return (
