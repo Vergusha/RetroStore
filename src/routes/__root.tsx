@@ -7,7 +7,7 @@ import { ScrollToTop } from '../components/ScrollToTop'
 
 export const Route = createRootRoute({
   component: () => (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col retro-crt retro-flicker">
       <Header />
       <main className="flex-grow">
         <Outlet />

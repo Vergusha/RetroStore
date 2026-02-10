@@ -63,6 +63,7 @@ function MarketplaceProductPage() {
     const [sellerProfile, setSellerProfile] = useState<SellerProfile | null>(null)
     const [sellerReviews, setSellerReviews] = useState<SellerReview[]>([])
     const [loading, setLoading] = useState(true)
+    const [booting, setBooting] = useState(true)
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [buyDialogOpen, setBuyDialogOpen] = useState(false)
     const [purchasing, setPurchasing] = useState(false)
@@ -77,6 +78,12 @@ function MarketplaceProductPage() {
 
     useEffect(() => {
         loadProduct()
+    }, [productId])
+
+    useEffect(() => {
+        setBooting(true)
+        const timer = window.setTimeout(() => setBooting(false), 650)
+        return () => window.clearTimeout(timer)
     }, [productId])
 
     async function loadProduct() {
@@ -159,26 +166,32 @@ function MarketplaceProductPage() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-[60vh]">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
+            <>
+                {booting && <div className="retro-poweron" aria-hidden="true" />}
+                <div className="flex items-center justify-center min-h-[60vh]">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                </div>
+            </>
         )
     }
 
     if (!product) {
         return (
-            <div className="container mx-auto px-4 py-16 text-center">
-                <h1 className="text-4xl font-bold mb-4">Product Not Found</h1>
-                <p className="text-muted-foreground mb-8">
-                    The product you're looking for doesn't exist or has been removed.
-                </p>
-                <Button asChild>
-                    <Link to="/marketplace">
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Marketplace
-                    </Link>
-                </Button>
-            </div>
+            <>
+                {booting && <div className="retro-poweron" aria-hidden="true" />}
+                <div className="container mx-auto px-4 py-16 text-center">
+                    <h1 className="text-4xl font-bold mb-4">Product Not Found</h1>
+                    <p className="text-muted-foreground mb-8">
+                        The product you're looking for doesn't exist or has been removed.
+                    </p>
+                    <Button asChild>
+                        <Link to="/marketplace">
+                            <ArrowLeft className="h-4 w-4 mr-2" />
+                            Back to Marketplace
+                        </Link>
+                    </Button>
+                </div>
+            </>
         )
     }
 
@@ -187,6 +200,7 @@ function MarketplaceProductPage() {
 
     return (
         <div className="container mx-auto px-4 py-8">
+            {booting && <div className="retro-poweron" aria-hidden="true" />}
             <Breadcrumbs
                 items={[
                     { label: 'Marketplace', href: '/marketplace' },

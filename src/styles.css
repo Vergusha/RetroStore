@@ -1,30 +1,17 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
-body {
-  @apply m-0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+  --font-press-start: 'Press Start 2P', system-ui, sans-serif;
+
+  --radius-sm: 0px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+  --radius-xl: 8px;
+  
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -40,14 +27,17 @@ code {
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -59,223 +49,94 @@ code {
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0.007 192.873);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0.007 192.873);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0.007 192.873);
-  --primary: oklch(0.492 0.137 165.334);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.004 192.873);
-  --secondary-foreground: oklch(0.208 0.012 192.873);
-  --muted: oklch(0.967 0.004 192.873);
-  --muted-foreground: oklch(0.557 0.012 192.873);
-  --accent: oklch(0.967 0.004 192.873);
-  --accent-foreground: oklch(0.208 0.012 192.873);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.006 192.873);
-  --input: oklch(0.929 0.006 192.873);
-  --ring: oklch(0.492 0.137 165.334);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.145 0.007 192.873);
-  --sidebar-primary: oklch(0.492 0.137 165.334);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.967 0.004 192.873);
-  --sidebar-accent-foreground: oklch(0.208 0.012 192.873);
-  --sidebar-border: oklch(0.929 0.006 192.873);
-  --sidebar-ring: oklch(0.492 0.137 165.334);
+  /* Retro Neon Theme Variables */
+  --neon-green: #39FF14;
+  --neon-pink: #FF00FF;
+  --retro-black: #050505;
+  --retro-gray: #1a1a1a;
+  
+  --background: var(--retro-black);
+  --foreground: var(--neon-green);
+  
+  --card: #000000;
+  --card-foreground: var(--neon-green);
+  
+  --popover: var(--retro-black);
+  --popover-foreground: var(--neon-green);
+  
+  --primary: var(--neon-green);
+  --primary-foreground: #000000;
+  
+  --secondary: var(--neon-pink);
+  --secondary-foreground: var(--retro-black);
+  
+  --muted: var(--retro-gray);
+  --muted-foreground: #88cc88;
+  
+  --accent: var(--retro-gray);
+  --accent-foreground: var(--neon-green);
+  
+  --destructive: #FF0000;
+  --destructive-foreground: #FFFFFF;
+  
+  --border: var(--neon-green);
+  --input: var(--retro-gray);
+  --ring: var(--neon-green);
+  
+  --radius: 0px;
+
+  /* Charts - Retro Colors */
+  --chart-1: var(--neon-green);
+  --chart-2: var(--neon-pink);
+  --chart-3: #FFFF00;
+  --chart-4: #00FFFF;
+  --chart-5: #FFFFFF;
+  
+  --sidebar: var(--retro-black);
+  --sidebar-foreground: var(--neon-green);
+  --sidebar-primary: var(--neon-green);
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: var(--retro-gray);
+  --sidebar-accent-foreground: var(--neon-green);
+  --sidebar-border: var(--neon-green);
+  --sidebar-ring: var(--neon-green);
 }
 
 .dark {
-  --background: oklch(0.145 0.007 192.873);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.208 0.012 192.873);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.208 0.012 192.873);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.692 0.163 164.693);
-  --primary-foreground: oklch(0.208 0.012 192.873);
-  --secondary: oklch(0.282 0.013 192.873);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.282 0.013 192.873);
-  --muted-foreground: oklch(0.707 0.011 192.873);
-  --accent: oklch(0.282 0.013 192.873);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(0.282 0.013 192.873);
-  --input: oklch(0.282 0.013 192.873);
-  --ring: oklch(0.692 0.163 164.693);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.012 192.873);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.692 0.163 164.693);
-  --sidebar-primary-foreground: oklch(0.208 0.012 192.873);
-  --sidebar-accent: oklch(0.282 0.013 192.873);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.282 0.013 192.873);
-  --sidebar-ring: oklch(0.692 0.163 164.693);
+  --background: var(--retro-black);
+  --foreground: var(--neon-green);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-/* Custom animations for retro store */
-@keyframes blob {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-@keyframes pulse-soft {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.7;
-  }
-}
-
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.animate-blob {
-  animation: blob 7s infinite;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animate-delay-200 {
-  animation-delay: 0.2s;
-}
-
-.animate-delay-400 {
-  animation-delay: 0.4s;
-}
-
-.animate-shimmer {
-  animation: shimmer 2s infinite linear;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  background-size: 200% 100%;
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.animate-pulse-soft {
-  animation: pulse-soft 2s ease-in-out infinite;
-}
-
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-muted/50;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/20 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-muted-foreground/40;
-}
-
-/* Font family */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: 'Press Start 2P', system-ui, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  background-image: 
+    linear-gradient(rgba(57, 255, 20, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 20, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  min-height: 100vh;
 }
 
-/* Selection color */
-::selection {
-  @apply bg-primary/20 text-foreground;
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 9999;
 }
 
-/* Focus visible outlines */
-:focus-visible {
-  @apply outline-2 outline-offset-2 outline-primary;
+h1, h2, h3, h4, h5, h6, p, span, a, button, input, label {
+  font-family: 'Press Start 2P', system-ui, cursive;
 }
 
-/* Enhanced card hover effects */
-@layer components {
-  .card-hover {
-    @apply transition-shadow duration-200 hover:shadow-md;
-  }
-
-  /* Glass morphism effect */
-  .glass {
-    @apply bg-background border-border;
-  }
-
-  /* Gradient text */
-  .text-gradient {
-    @apply text-primary;
-  }
-
-  /* Smooth button transitions */
-  .btn-smooth {
-    @apply transition-colors duration-200;
-  }
-}
