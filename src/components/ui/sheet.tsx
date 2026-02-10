@@ -9,15 +9,15 @@ import { cn } from "@/lib/utils"
 
 // Context
 const SheetContext = React.createContext<{
-  open: boolean
-  setOpen: (open: boolean) => void
+    open: boolean
+    setOpen: (open: boolean) => void
 } | null>(null)
 
 function Sheet({
-  children,
-  open: controlledOpen,
-  onOpenChange,
-  defaultOpen = false,
+    children,
+    open: controlledOpen,
+    onOpenChange,
+    defaultOpen = false,
 }: {
     children: React.ReactNode
     open?: boolean
@@ -48,18 +48,18 @@ function SheetTrigger({ children, asChild, className, ...props }: any) {
         props.onClick?.(e)
         context?.setOpen(true)
     }
-  
+
     if (asChild && React.isValidElement(children)) {
-      const child = children as React.ReactElement<any>
-      return React.cloneElement(child, {
-          ...props,
-          ...child.props,
-          className: cn(className, props.className, child.props.className),
-          onClick: (e: any) => {
-              handleClick(e)
-              child.props.onClick?.(e)
-          }
-      })
+        const child = children as React.ReactElement<any>
+        return React.cloneElement(child, {
+            ...props,
+            ...child.props,
+            className: cn(className, props.className, child.props.className),
+            onClick: (e: any) => {
+                handleClick(e)
+                child.props.onClick?.(e)
+            }
+        })
     }
     return <button className={className} onClick={handleClick} {...props}>{children}</button>
 }
@@ -86,8 +86,8 @@ const SheetPortal = ({ children }: { children: React.ReactNode }) => <>{children
 
 const SheetOverlay = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
     ({ className, ...props }, ref) => (
-       // Overlay handled in Content usually, but mimicking structure
-       <div className={cn("fixed inset-0 z-50 bg-black/80 backdrop-blur-[2px]", className)} {...props} ref={ref} />
+        // Overlay handled in Content usually, but mimicking structure
+        <div className={cn("fixed inset-0 z-50 bg-black/80 backdrop-blur-[2px]", className)} {...props} ref={ref} />
     )
 )
 SheetOverlay.displayName = "SheetOverlay"
@@ -120,9 +120,9 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
 
         return createPortal(
             <div className="fixed inset-0 z-50 flex">
-                <div 
-                  className="fixed inset-0 bg-black/80 backdrop-blur-[2px]" 
-                  onClick={() => context.setOpen(false)}
+                <div
+                    className="fixed inset-0 bg-black/80 backdrop-blur-[2px]"
+                    onClick={() => context.setOpen(false)}
                 />
                 <div
                     ref={ref}

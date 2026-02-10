@@ -25,7 +25,7 @@ function Dialog({
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen)
   const isControlled = controlledOpen !== undefined
   const open = isControlled ? controlledOpen : uncontrolledOpen
-  
+
   const setOpen = React.useCallback((newOpen: boolean) => {
     if (onOpenChange) {
       onOpenChange(newOpen)
@@ -50,7 +50,7 @@ function DialogTrigger({
   ...props
 }: React.HTMLAttributes<HTMLElement> & { asChild?: boolean }) {
   const context = React.useContext(DialogContext)
-  
+
   const handleClick = (e: React.MouseEvent) => {
     props.onClick?.(e as any)
     context?.setOpen(true)
@@ -89,23 +89,23 @@ function DialogClose({
   className,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-    const context = React.useContext(DialogContext)
-    
-    return (
-        <button
-            type="button"
-            className={cn("cursor-pointer", className)}
-            onClick={(e) => {
-                context?.setOpen(false)
-                props.onClick?.(e)
-            }}
-            {...props}
-        />
-    )
+  const context = React.useContext(DialogContext)
+
+  return (
+    <button
+      type="button"
+      className={cn("cursor-pointer", className)}
+      onClick={(e) => {
+        context?.setOpen(false)
+        props.onClick?.(e)
+      }}
+      {...props}
+    />
+  )
 }
 
 function DialogOverlay({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn(className)} {...props} style={{display:'none'}} />
+  return <div className={cn(className)} {...props} style={{ display: 'none' }} />
 }
 
 
@@ -117,12 +117,12 @@ function DialogContent({
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & { showCloseButton?: boolean }) {
   const context = React.useContext(DialogContext)
-  
+
   if (!context?.open) return null
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center font-mono">
-      <div 
+      <div
         className="fixed inset-0 bg-black/80 backdrop-blur-[2px] transition-all"
         onClick={() => context.setOpen(false)}
       />
@@ -136,10 +136,10 @@ function DialogContent({
       >
         {children}
         {showCloseButton && (
-            <DialogClose className="absolute right-4 top-4 rounded-none border-2 border-primary bg-background p-1 opacity-70 transition-opacity hover:opacity-100 hover:bg-primary hover:text-primary-foreground focus:outline-none disabled:pointer-events-none">
+          <DialogClose className="absolute right-4 top-4 rounded-none border-2 border-primary bg-background p-1 opacity-70 transition-opacity hover:opacity-100 hover:bg-primary hover:text-primary-foreground focus:outline-none disabled:pointer-events-none">
             <XIcon className="h-4 w-4" />
             <span className="sr-only">Close</span>
-            </DialogClose>
+          </DialogClose>
         )}
       </div>
     </div>,

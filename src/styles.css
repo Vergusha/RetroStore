@@ -11,7 +11,7 @@
   --radius-md: 2px;
   --radius-lg: 4px;
   --radius-xl: 8px;
-  
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -31,13 +31,13 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -54,35 +54,35 @@
   --neon-pink: #FF00FF;
   --retro-black: #050505;
   --retro-gray: #1a1a1a;
-  
+
   --background: var(--retro-black);
   --foreground: var(--neon-green);
-  
+
   --card: #000000;
   --card-foreground: var(--neon-green);
-  
+
   --popover: var(--retro-black);
   --popover-foreground: var(--neon-green);
-  
+
   --primary: var(--neon-green);
   --primary-foreground: #000000;
-  
+
   --secondary: var(--neon-pink);
   --secondary-foreground: var(--retro-black);
-  
+
   --muted: var(--retro-gray);
   --muted-foreground: #88cc88;
-  
+
   --accent: var(--retro-gray);
   --accent-foreground: var(--neon-green);
-  
+
   --destructive: #FF0000;
   --destructive-foreground: #FFFFFF;
-  
+
   --border: var(--neon-green);
   --input: var(--retro-gray);
   --ring: var(--neon-green);
-  
+
   --radius: 0px;
 
   /* Charts - Retro Colors */
@@ -91,7 +91,7 @@
   --chart-3: #FFFF00;
   --chart-4: #00FFFF;
   --chart-5: #FFFFFF;
-  
+
   --sidebar: var(--retro-black);
   --sidebar-foreground: var(--neon-green);
   --sidebar-primary: var(--neon-green);
@@ -111,7 +111,7 @@ body {
   font-family: 'Press Start 2P', system-ui, sans-serif;
   background-color: var(--background);
   color: var(--foreground);
-  background-image: 
+  background-image:
     linear-gradient(rgba(57, 255, 20, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(57, 255, 20, 0.1) 1px, transparent 1px);
   background-size: 40px 40px;
@@ -125,18 +125,26 @@ body::after {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.15),
-    rgba(0, 0, 0, 0.15) 1px,
-    transparent 1px,
-    transparent 2px
-  );
+  background: repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px);
   pointer-events: none;
   z-index: 9999;
 }
 
-h1, h2, h3, h4, h5, h6, p, span, a, button, input, label {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+button,
+input,
+label {
   font-family: 'Press Start 2P', system-ui, cursive;
 }
-
