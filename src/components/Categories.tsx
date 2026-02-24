@@ -14,12 +14,12 @@ interface Category {
 const categoryDefinitions = [
     {
         id: 1,
-        name: 'Retro Consoles',
+        name: 'Retro',
         icon: <Gamepad2 className="w-8 h-8" />
     },
     {
         id: 2,
-        name: 'Modern Consoles',
+        name: 'Modern',
         icon: <Cpu className="w-8 h-8" />
     },
     {
@@ -34,12 +34,12 @@ const categoryDefinitions = [
     },
     {
         id: 5,
-        name: 'Limited Edition',
+        name: 'Limited',
         icon: <Zap className="w-8 h-8" />
     },
     {
         id: 6,
-        name: 'Mobile Gaming',
+        name: 'Mobile',
         icon: <Smartphone className="w-8 h-8" />
     }
 ]
@@ -99,16 +99,16 @@ export function Categories() {
                         >
                             <Button
                                 variant="outline"
-                                className="h-auto p-6 flex flex-col items-center gap-3 bg-black border-2 border-primary hover:bg-black hover:border-secondary transition-all duration-300 group w-full rounded-xl"
+                                className="h-auto p-4 md:p-6 flex flex-col items-center gap-3 bg-black border-2 border-primary hover:bg-black hover:border-secondary transition-all duration-300 group w-full rounded-xl whitespace-normal"
                             >
                                 <div className="text-primary group-hover:text-secondary transition-colors duration-300">
                                     {category.icon}
                                 </div>
-                                <div className="text-center space-y-1">
-                                    <h3 className="font-bold text-sm uppercase font-mono text-primary group-hover:text-secondary transition-colors duration-300">
+                                <div className="text-center space-y-1 w-full">
+                                    <h3 className="font-bold text-xs md:text-sm uppercase font-mono text-primary group-hover:text-secondary transition-colors duration-300 break-words leading-tight">
                                         {category.name}
                                     </h3>
-                                    <span className="text-xs font-mono text-primary/80 group-hover:text-secondary/80 transition-colors duration-300">
+                                    <span className="text-[10px] md:text-xs font-mono text-primary/80 group-hover:text-secondary/80 transition-colors duration-300">
                                         {category.itemCount}
                                     </span>
                                 </div>

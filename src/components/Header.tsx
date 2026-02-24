@@ -78,12 +78,11 @@ export function Header() {
                 <div className="flex items-center justify-between relative z-10">
                     {/* Logo & Navigation */}
                     <div className="flex items-center gap-6">
-                        <Link to="/" className="flex items-center gap-4 group">
-                            <Gamepad2 className="w-10 h-10 text-primary" strokeWidth={2.5} />
+                        <Link to="/" className="flex items-center gap-2 md:gap-4 group">
+                            <Gamepad2 className="w-8 h-8 md:w-10 md:h-10 text-primary" strokeWidth={2.5} />
                             <div
-                                className="text-primary uppercase tracking-wider cursor-pointer"
+                                className="text-primary uppercase tracking-wider cursor-pointer text-lg md:text-2xl"
                                 style={{
-                                    fontSize: '1.5rem',
                                     textShadow: '0 0 10px var(--primary), 0 0 20px var(--primary)',
                                     lineHeight: '1.5'
                                 }}
